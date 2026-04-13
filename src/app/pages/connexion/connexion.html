@@ -1,1 +1,22 @@
-<p>connexion works!</p>
+<div class="auth-page">
+    <div class="auth-card-container">
+      
+      <div class="form-content">
+        @if (isRegisterMode) {
+          <app-register></app-register>
+        } @else {
+          <app-login></app-login>
+        }
+      </div>
+  
+      <div class="toggle-container">
+        <p>
+          {{ isRegisterMode ? 'J’ai déjà un compte ?' : 'Pas encore de compte ?' }}
+          <button mat-button color="primary" (click)="toggleMode()">
+            {{ isRegisterMode ? 'Se connecter' : 'Créer un compte' }}
+          </button>
+        </p>
+      </div>
+  
+    </div>
+  </div>
