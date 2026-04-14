@@ -1,0 +1,40 @@
+/* Centre toute la page */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh; /* Prend presque toute la hauteur de l'écran */
+    background-color: #fafafa; /* Petit gris léger type Material */
+  }
+  
+  /* Conteneur principal qui harmonise les deux composants */
+  .auth-card-container {
+    width: 100%;
+    max-width: 450px; /* Largeur max pour que ce soit beau sur PC et mobile */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espace entre le formulaire et le bouton toggle */
+  }
+  
+  /* On force les composants Angular à prendre toute la largeur */
+  app-login, app-register {
+    width: 100%;
+  }
+  
+  /* Style du conteneur de bascule */
+  .toggle-container {
+    text-align: center;
+    padding: 10px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  
+  .toggle-container p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  /* Animation douce lors du changement (optionnel) */
+  .form-content {
+    transition: all 0.3s ease-in-out;
+  }
