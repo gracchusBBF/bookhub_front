@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -25,6 +27,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./login.css']
 })
 export class Login {
+  private authService = inject(AuthService);
+  private router = inject(Router);
   hide = true; // Pour masquer/afficher le mot de passe
 
   loginForm = new FormGroup({
@@ -34,7 +38,29 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      // 2. Appel au service de login
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          console.log('Connexion réussie !');
+          
+          // 3. Récupération du rôle et redirection
+          const role = this.authService.getUserRole();
+          this.redirectBasedOnRole(role);
+        },
+        error: (err) => {
+          console.error('Erreur de connexion', err);
+          // Optionnel : ajouter un message d'erreur pour l'utilisateur
+        }
+      });
+    }
+  }
+  private redirectBasedOnRole(role: string) {
+    if (role === 'ROLE_ADMIN') {
+      this.router.navigate(['/admin']);
+    } else if (role === 'ROLE_LIBRARIAN') {
+      this.router.navigate(['/librarian']);
+    } else {
+      this.router.navigate(['']);
     }
   }
 }

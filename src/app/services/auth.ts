@@ -1,20 +1,63 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth'; // L'URL de ton Spring Boot
+  private apiUrl = 'http://localhost:8080/api/auth';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  // Un BehaviorSubject permet de diffuser l'état de connexion partout dans l'app
+  private authStatus = new BehaviorSubject<boolean>(this.hasToken());
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
+      tap((response: any) => this.handleAuthentication(response))
+    );
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+      tap((response: any) => this.handleAuthentication(response))
+    );
+  }
+
+  // Stocke le token et met à jour l'état
+  private handleAuthentication(response: any) {
+    if (response && response.token) {
+      localStorage.setItem('token', response.token);
+      this.authStatus.next(true);
+    }
+  }
+
+  // Pour savoir si on est connecté (au démarrage ou ailleurs)
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  // Getter pour s'abonner à l'état de connexion (ex: cacher/afficher des menus)
+  get isLoggedIn$() {
+    return this.authStatus.asObservable();
+  }
+
+  // Récupérer le rôle pour la redirection
+  getUserRole(): string {
+    const token = localStorage.getItem('token');
+    if (!token) return '';
+    try {
+      const decoded: any = jwtDecode(token);
+      // Attention : vérifie si ton backend envoie "role", "roles" ou "authorities"
+      return decoded.role || ''; 
+    } catch (e) {
+      return '';
+    }
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.authStatus.next(false);
   }
 }

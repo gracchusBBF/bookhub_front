@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core'; // 1. Ajout de inject
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../services/auth'; // 2. Vérifie bien le nom du fichier
-
+import { Router } from '@angular/router';
 // Material
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,14 +28,16 @@ import { MatIconModule } from '@angular/material/icon';
 export class Register {
   // 3. Utilisation de inject() au lieu du constructor
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   hidePassword = true;
   hideConfirm = true;
 
   registerForm = new FormGroup({
-    lastname: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    firsttname: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(3)]), // Correction typo ici
     email: new FormControl('', [Validators.required, Validators.email]),
+    phoneNumber: new FormControl('', [Validators.required]), // Ajout du champ manquant
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('', [Validators.required])
   }, { validators: this.passwordMatchValidator });
@@ -49,13 +51,22 @@ export class Register {
 
   onRegister() {
     if (this.registerForm.valid) {
-      // On envoie les données au service
       this.authService.register(this.registerForm.value).subscribe({
-        next: (response) => {
-          console.log('Inscription réussie !', response);
+        next: () => {
+          // Le token est déjà stocké grâce au 'tap' dans le service
+          const role = this.authService.getUserRole();
+          
+          // Redirection basée sur le rôle
+          if (role === 'ROLE_ADMIN') {
+            this.router.navigate(['/admin']);
+          } else if (role === 'ROLE_LIBRARIAN') {
+            this.router.navigate(['/librarian']);
+          } else {
+            this.router.navigate(['']);
+          }
         },
         error: (err) => {
-          console.error('Erreur lors de l\'inscription', err);
+          console.error('Erreur inscription:', err);
         }
       });
     }
