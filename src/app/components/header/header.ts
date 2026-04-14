@@ -1,10 +1,20 @@
-import { Component } from '@angular/core';
-import { RouterLinkActive, RouterLinkWithHref } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLinkActive, RouterLink, Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLinkWithHref, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header {}
+export class Header {
+  public authService = inject(AuthService);
+  private router = inject(Router);
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/connexion']);
+  }
+}
