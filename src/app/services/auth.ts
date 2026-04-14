@@ -55,7 +55,25 @@ export class AuthService {
       return '';
     }
   }
-
+  
+  getEmail() {
+    const token = localStorage.getItem('token');
+    if (!token) return '';
+    try {
+      const decoded: any = jwtDecode(token);
+      console.log('Contenu du token décodé :', decoded); // <--- AJOUTE CECI
+      
+      // Souvent dans Spring Security, l'email est dans 'sub' ou 'username'
+      return decoded.email || decoded.sub || ''; 
+    } catch (e) {
+      console.error('Erreur décodage token', e);
+      return '';
+    }
+  }
+  changePassword(data: any): Observable<any> {
+    // L'URL doit correspondre à ton @PutMapping("/change-password") côté Java
+    return this.http.put(`http://localhost:8080/api/users/change-password`, data);
+  }
   logout() {
     localStorage.removeItem('token');
     this.authStatus.next(false);
