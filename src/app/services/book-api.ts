@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { BookInterface } from '../models/book-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +10,17 @@ import { Observable } from 'rxjs';
 export class BookApi {
 
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly APIUrl = environment.apiUrl;
+  private readonly APIUrl = `${environment.apiUrl}/books`;
+  private readonly token = environment.token;
+  private _books = signal<BookInterface[]>([]);
+  public readonly books = this._books.asReadonly();
 
-  getBooks(): Observable<any> {
-    return this.http.get(`${this.APIUrl}/books`)
+  getBooks(): Observable<BookInterface[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http.get<BookInterface[]>(this.APIUrl, {headers})
+    .pipe(tap(books => this._books.set(books)));
   }
 }
