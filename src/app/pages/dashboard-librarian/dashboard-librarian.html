@@ -1,5 +1,5 @@
 <div class="bookhub-librarian-dashboard-container">
-  <h1 class="bookhub-librarian-dashboard-title">Tableau de bord</h1>
+  <h1 class="mat-headline-4 mb-6">Tableau de bord</h1>
   <div class="bookhub-librarian-dashboard-card-container">
     <div class="bookhub-librarian-dashboard-essential-informations">
       <mat-card class="bookhub-librarian-dashboard-loanTotal" appearance="outlined">
@@ -37,19 +37,21 @@
             </ng-container>
             <ng-container matColumnDef="deadline">
               <th mat-header-cell *matHeaderCellDef> Date limite </th>
-              <td mat-cell *matCellDef="let element"> {{element.deadline}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy' }} </td>
             </ng-container>
-            <ng-container matColumnDef="book">
+            <ng-container matColumnDef="bookTitle">
               <th mat-header-cell *matHeaderCellDef> Livre </th>
-              <td mat-cell *matCellDef="let element"> {{element.book}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.bookTitle}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </mat-card-content>
-        <mat-card-actions>
-          <button matButton>Voir la liste de retards</button>
-        </mat-card-actions>
+        @if (overdueLoans().length > 5) {
+          <mat-card-actions>
+            <button matButton>Voir la liste de retards</button>
+          </mat-card-actions>
+        }
       </mat-card>
     </div>
     <div class="bookhub-librarian-dashboard-topTen">
