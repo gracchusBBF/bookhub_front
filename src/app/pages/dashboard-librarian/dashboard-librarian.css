@@ -1,0 +1,36 @@
+.bookhub-librarian-dashboard-card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  border: red solid 2px;
+  padding: 10px;
+  min-height: 80vh;
+}
+
+.bookhub-librarian-dashboard-essential-informations {
+  display: grid;
+  grid-row-gap: 16px;
+}
+
+.bookhub-librarian-dashboard-loanTotal {
+}
+
+bookhub-librarian-dashboard-loanActive {
+}
+
+.bookhub-librarian-dashboard-overdue {
+  display: grid;
+}
+
+.bookhub-librarian-dashboard-overdue-table {
+  width: 100%;
+}
+
+.bookhub-librarian-dashboard-topTen {
+  display: grid;
+}
+
+.bookhub-librarian-dashboard-trends {
+  display: grid;
+}
