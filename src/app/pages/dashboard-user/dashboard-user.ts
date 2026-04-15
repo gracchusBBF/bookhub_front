@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LoanService, LoanDTO } from '../../services/loan';
-import { UserService, DeleteAccountDTO } from '../../services/user';
+import { UserService, DeleteAccountDTO, UserDataDTO } from '../../services/user';
+import { UpdateUserInfoDialog } from '../../components/update-user-info-dialog/update-user-info-dialog';
 import { ChangePasswordDialog } from '../../components/change-password-dialog/change-password-dialog';
 import { DeleteAccountDialog } from '../../components/delete-account-dialog/delete-account-dialog';
 import { AuthService } from '../../services/auth';
@@ -55,7 +56,7 @@ export class DashboardUser implements OnInit {
   
   // Données de test (à remplacer plus tard par un appel API)
   empruntsSource: LoanDTO[] = []
-
+  user: UserDataDTO | null = null;
   reservationsSource: Reservation[] = [
     { titre: 'Dune', dateRetour: 'En attente', position: '2/5' },
     { titre: '', dateRetour: '', position: '' }
@@ -63,22 +64,55 @@ export class DashboardUser implements OnInit {
 
   ngOnInit(): void {
     const email = this.authService.getEmail();
+    
     if (email) {
+      // 1. Récupération des emprunts (Ton code existant)
       this.loanService.getLoansByUserEmail(email).subscribe({
         next: (data) => {
           this.empruntsSource = data;
-          this.cdr.detectChanges(); // 3. Force Angular à rafraîchir la vue
+          this.cdr.detectChanges();
         },
-        error: (err) => console.error(err)
+        error: (err) => console.error("Erreur prêts:", err)
+      });
+
+      // 2. Récupération des infos profil (Le nouvel ajout)
+      this.userService.getUser(email).subscribe({
+        next: (userData: UserDataDTO) => {
+          this.user = userData; // On stocke les infos pour l'affichage
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error("Erreur profil:", err)
       });
     }
-  }
+}
   isOverdue(deadline: string): boolean {
     if (!deadline) return false;
     return new Date(deadline) < new Date();
   }
   onLogout() {
     // Logique de déconnexion si nécessaire ici aussi
+  }
+  updateUserInfos() {
+    const dialogRef = this.dialog.open(UpdateUserInfoDialog, {
+      width: '450px',
+      data: this.user // On passe les données actuelles
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // result contient les données modifiées de la modale
+        this.userService.updateUser(result.email, result).subscribe({
+          next: (updated) => {
+            this.user = updated; // Mise à jour de la vue
+            this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', { duration: 3000 });
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            this.snackBar.open('Erreur lors de la mise à jour', 'Fermer', { duration: 5000 });
+          }
+        });
+      }
+    });
   }
   openDeleteAccount(){
     const dialogRef = this.dialog.open(DeleteAccountDialog, {
