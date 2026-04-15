@@ -16,11 +16,26 @@
 }
 
 mat-form-field {
-    position: fixed;
-    right: 0;
-    margin: 20px 0;
+    text-align: center;
+    margin: 10px 0 0 50px ;
+    width: 500px !important;
 }
 
 .example-form-field {
     width: 200px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.pagination button.active {
+    background-color: #1a73e8;
+    color: white;
+    border-radius: 4px;
 }

@@ -1,6 +1,5 @@
 <section class="section-home">
   <mat-form-field class="example-form-field">
-    <mat-label>Clearable input</mat-label>
     <input matInput type="text" [(ngModel)]="value" placeholder="Saisir un isbn, un auteur ou titre"/>
     @if (value) {
       <button matSuffix matIconButton aria-label="Clear" (click)="value=''">
@@ -15,4 +14,28 @@
       <p>Aucun livre trouvé ou chargement en cours...</p>
     }
   </div>
+  <nav class="pagination">
+
+    <button mat-icon-button
+      [disabled]="currentPage() === 0"
+      (click)="goToPage(currentPage() - 1)">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+  
+    @for (page of pages; track page) {
+      <button mat-button
+        [class.active]="page === currentPage()"
+        (click)="goToPage(page)">
+        {{ page + 1 }}
+      </button>
+    }
+  
+    <button mat-icon-button
+      [disabled]="currentPage() === totalPages() - 1"
+      (click)="goToPage(currentPage() + 1)">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  
+  </nav>
+
 </section>
