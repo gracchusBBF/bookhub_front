@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Modifier mon mot de passe</h2>
+    <mat-dialog-content>
+      <form [formGroup]="passwordForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Entrez votre mot de passe</mat-label>
+          <input matInput type="password" formControlName="password">
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Annuler</button>
+      <button mat-raised-button color="primary" [disabled]="passwordForm.invalid" (click)="onSave()">Supprimer mon compte</button>
+    </mat-dialog-actions>

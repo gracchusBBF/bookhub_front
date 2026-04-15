@@ -4,6 +4,7 @@ import { Connexion } from './pages/connexion/connexion';
 import { DashboardAdmin } from './pages/dashboard-admin/dashboard-admin';
 import { DashboardUser } from './pages/dashboard-user/dashboard-user';
 import { DashboardLibrarian } from './pages/dashboard-librarian/dashboard-librarian';
+import {DeleteAccountFallback} from './pages/delete-account-fallback/delete-account-fallback'
 
 export const routes: Routes = [
     {
@@ -20,5 +21,8 @@ export const routes: Routes = [
     },
     {
         path:  'admin', component: DashboardAdmin
+    },
+    {
+        path:  'deleted-account', component: DeleteAccountFallback
     }
 ];

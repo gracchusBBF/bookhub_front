@@ -28,14 +28,14 @@ export class AuthService {
   // Stocke le token et met à jour l'état
   private handleAuthentication(response: any) {
     if (response && response.token) {
-      localStorage.setItem('token', response.token);
+      sessionStorage.setItem('token', response.token);
       this.authStatus.next(true);
     }
   }
 
   // Pour savoir si on est connecté (au démarrage ou ailleurs)
   private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 
   // Getter pour s'abonner à l'état de connexion (ex: cacher/afficher des menus)
@@ -45,7 +45,7 @@ export class AuthService {
 
   // Récupérer le rôle pour la redirection
   getUserRole(): string {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return '';
     try {
       const decoded: any = jwtDecode(token);
@@ -57,7 +57,7 @@ export class AuthService {
   }
   
   getEmail() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return '';
     try {
       const decoded: any = jwtDecode(token);
@@ -75,7 +75,7 @@ export class AuthService {
     return this.http.put(`http://localhost:8080/api/users/change-password`, data);
   }
   logout() {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     this.authStatus.next(false);
   }
 }
