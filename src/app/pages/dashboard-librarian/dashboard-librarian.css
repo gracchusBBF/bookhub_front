@@ -1,11 +1,22 @@
 .bookhub-librarian-dashboard-card-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
+  /*grid-template-columns: 1fr 1fr;*/
+  /*grid-template-rows: auto auto;*/
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   gap: 16px;
   border: red solid 2px;
   padding: 10px;
   min-height: 80vh;
+}
+
+.mat-mdc-card-content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-size: xxx-large;
+  justify-content: center;
+  align-items: center;
 }
 
 .bookhub-librarian-dashboard-essential-informations {
@@ -21,6 +32,8 @@ bookhub-librarian-dashboard-loanActive {
 
 .bookhub-librarian-dashboard-overdue {
   display: grid;
+  grid-column: span 2 / span 2;
+  grid-row: span 3 / span 3;
 }
 
 .bookhub-librarian-dashboard-overdue-table {
@@ -28,9 +41,21 @@ bookhub-librarian-dashboard-loanActive {
 }
 
 .bookhub-librarian-dashboard-topTen {
-  display: grid;
+  /*display: grid;*/
 }
 
 .bookhub-librarian-dashboard-trends {
   display: grid;
+  grid-column: span 2 / span 2;
+  grid-row: span 2 / span 2;
+  grid-column-start: 4;
+  grid-row-start: 4;
+}
+
+.bookhub-librarian-dashboard-loans {
+  display: grid;
+  grid-column: span 3 / span 3;
+  grid-row: span 4 / span 4;
+  grid-column-start: 1;
+  grid-row-start: 2;
 }
