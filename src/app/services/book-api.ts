@@ -19,17 +19,27 @@ export class BookApi {
   private _books = signal<BookInterface[]>([]);
   public readonly books = this._books.asReadonly();
 
-  getBooks(page: number = 0): Observable<PageInterface<BookInterface>> {
+  getBooks(page: number = 0, category?: string, status?: string): Observable<PageInterface<BookInterface>> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    const params = new HttpParams()
-      .set('page', page+1)
+    let params = new HttpParams().set('page', page);
+    if (category && category !== 'null') params = params.set('category', category);
+    if (status && status !== 'null') params = params.set('status', status);
+
 
     return this.http
     .get<PageInterface<BookInterface>>(this.APIUrlBook, {headers, params})
-    .pipe(tap(res => this._books.set(res.content)));
+    .pipe(
+      tap(res => {
+        if (res && res.content) {
+          this._books.set(res.content);
+        } else {
+          this._books.set([]);
+        }
+      }
+      ));
   }
 
   loanABook(loan: Loan): Observable<Loan>{

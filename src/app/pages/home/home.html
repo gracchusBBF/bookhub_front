@@ -7,9 +7,20 @@
       </button>
     }
   </mat-form-field>
+  <select 
+    class="filter-category" 
+    [value]="selectedCategory()" 
+    (change)="onCategoryChange($event)">
+    
+    <option value="">Toutes les catégories</option>
+    
+    @for(cat of allCategories(); track cat) {
+      <option [value]="cat">{{ cat }}</option>
+    }
+</select>
   <div class="books-container">
-    @for (item of bookApiService.books(); track item.id) {
-      <app-book-card [book]="item"></app-book-card>
+    @for (book of books(); track book.id) {
+      <app-book-card [book]="book"></app-book-card>
     } @empty {
       <p>Aucun livre trouvé ou chargement en cours...</p>
     }
@@ -37,5 +48,4 @@
     </button>
   
   </nav>
-
 </section>

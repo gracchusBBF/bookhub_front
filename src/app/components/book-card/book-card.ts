@@ -7,22 +7,31 @@ import {MatIconModule} from '@angular/material/icon';
 import { BookApi } from '../../services/book-api';
 import { AuthService } from '../../services/auth';
 import { Loan } from '../../models/loan';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-book-card',
-  imports: [MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
   templateUrl: './book-card.html',
   styleUrl: './book-card.css',
 })
 export class BookCard {
   @Input({required: true}) book! : BookInterface;
+
+  constructor(protected _snackBar: MatSnackBar) {}
   
   protected readonly authService = inject(AuthService);
   protected readonly bookApiService = inject(BookApi);
 
   isModal: boolean = false;
+  isDetails : boolean = false;
+
   showModal() {
     this.isModal = !this.isModal
+  }
+
+  moreDetails() {
+    this.isDetails = !this.isDetails
   }
 
   loan() {
@@ -42,9 +51,20 @@ export class BookCard {
     }
 
     this.bookApiService.loanABook(loan).subscribe({
-      next: (response) => console.log("Emprunt réussi !", response),
-      error: (err) => console.error("Erreur lors de l'emprunt", err)
-    })
+      next: (response) => {
+        this._snackBar.open("Emprunt réussi !", "Fermer", {
+          duration: 3000, 
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
+        this.isModal = false;
+      },
+      error: (err) => {
+        this._snackBar.open("Erreur lors de l'emprunt", "Réessayer", {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+    }})
   }
 
   reserve() {

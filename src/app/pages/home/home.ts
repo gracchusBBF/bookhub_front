@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { BookApi } from '../../services/book-api';
 import { BookCard } from '../../components/book-card/book-card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookInterface } from '../../models/book-interface';
 
 @Component({
   selector: 'app-home',
@@ -23,28 +24,72 @@ export class Home implements OnInit {
   readonly currentPage = signal<number>(0);
   readonly totalPages  = signal<number>(0);
 
+  readonly allCategories = signal<string[]>([]);
+
+  readonly selectedCategory= signal<string>("");
+
+  public books = signal<BookInterface[]>([])
+
+  categories = computed(() => {
+    const allCategories = this.books().map(book => book.category);
+    return [...new Set(allCategories)].sort();
+  })
+
   ngOnInit(): void {
-    // Se déclenche à chaque changement de ?page= dans l'URL
     this.route.queryParamMap.subscribe(params => {
-      const page = Number(params.get('page') ?? 1);
-      this.currentPage.set(page);
-      this.loadBooks(page);
+
+      const pageUrl = Number(params.get('page') ?? 1);
+
+      const internalPage = pageUrl > 0 ? pageUrl - 1 : 0;
+
+      const category = params.get('category') ?? "";
+      const status = params.get('status') ?? "";
+
+      this.currentPage.set(internalPage);
+      this.selectedCategory.set(category.toLowerCase());
+
+      this.loadBooks(internalPage, category, status!);
     });
   }
 
-  private loadBooks(page: number): void {
-    this.bookApiService.getBooks(page).subscribe({
+  onCategoryChange(event: Event) {
+    const element = event.target as HTMLSelectElement;
+    const category = element.value;
+  
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { 
+        page: 1,
+        category: category || null 
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  private loadBooks(page: number, category: string, status: string): void {
+
+    this.bookApiService.getBooks(page, category, status).subscribe({
       next: (response) => {
-        this.totalPages.set(response.totalPages);
+        console.log(category, status)
+        const content = response?.content ?? []; 
+        const total = response?.totalPages ?? 0;
+
+        this.books.set(content);
+        this.totalPages.set(total);
+
+        if(this.allCategories().length === 0 && !category) {
+          const uniqueCats = [...new Set(content.map(b => b.category))].sort();
+          this.allCategories.set(uniqueCats);
+        }
       },
       error: (err) => console.error('Erreur :', err)
     });
   }
 
-  goToPage(page: number): void {
+  goToPage(pageIndex: number): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page },
+      queryParams: { page: pageIndex + 1},
       queryParamsHandling: 'merge'
     });
   }

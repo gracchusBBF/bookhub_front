@@ -38,13 +38,18 @@ section {
     min-width: 120px;
 }
 
-.example-button-row {
+.loan-reserve, .details {
     max-width: 600px;
     transition: transform 0.4s ease-in-out;
 }
 
-.example-button-row:hover {
+.loan-reserve:hover, .details:hover {
     transform: scale(1.05);
+}
+
+.dialog-modal{
+    display: flex;
+    gap:12px;
 }
 
   
