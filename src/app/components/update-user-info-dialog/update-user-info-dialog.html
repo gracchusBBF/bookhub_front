@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Modifier mes informations</h2>
+
+<mat-dialog-content>
+  <div class="form-container" style="display: flex; flex-direction: column; gap: 15px; padding-top: 10px;">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="updatedUser.email" type="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Prénom</mat-label>
+      <input matInput [(ngModel)]="updatedUser.firstName">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput [(ngModel)]="updatedUser.lastName">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Téléphone</mat-label>
+      <input matInput [(ngModel)]="updatedUser.phoneNumber">
+    </mat-form-field>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Enregistrer</button>
+</mat-dialog-actions>
