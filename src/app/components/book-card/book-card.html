@@ -5,15 +5,31 @@
             <mat-card-subtitle>{{ book.firstName}} {{book.lastName}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-                <p>{{ book.status }}</p>
+            <p>{{ book.status }}</p>
         </mat-card-content>
     </div>
     <div class="img-card">
         <img mat-card-image [src]="book.frontCoverImg" [alt]="book.title">
     </div>
     <section>
-        <div class="example-button-row">
-          <button matButton="elevated">Emprunter/Réserver</button>
-        </div>
+
+        @if(isModal) {
+            <div class="dialog-modal">
+                @if(book.status === "AVAILABLE") {
+                    <button matButton="elevated" (click)="loan()">Oui</button>
+                    <button matButton="elevated" (click)="showModal()">Non</button>
+                } @else {
+                    <button matButton="elevated" (click)="reserve()">Oui</button>
+                    <button matButton="elevated" (click)="showModal()">Non</button>
+                }
+            </div>
+        } @else {
+            <div class="example-button-row">
+                <button matButton="elevated" (click)="showModal()">
+                    {{ book.status === "AVAILABLE" ? "Emprunter" : "Réserver" }}
+                </button>
+            </div>
+        }
+
     </section>
 </mat-card>
