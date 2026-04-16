@@ -8,7 +8,7 @@ import {DeleteAccountFallback} from './pages/delete-account-fallback/delete-acco
 
 export const routes: Routes = [
     {
-        path: '', component: Home
+        path: '', component: Home,
     },
     {
         path: 'connexion', component: Connexion
@@ -24,5 +24,8 @@ export const routes: Routes = [
     },
     {
         path:  'deleted-account', component: DeleteAccountFallback
+    },
+    {
+        path: '**', redirectTo: "", pathMatch: "full"
     }
 ];

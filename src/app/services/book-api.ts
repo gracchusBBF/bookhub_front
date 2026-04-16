@@ -13,7 +13,7 @@ export class BookApi {
 
   private readonly http: HttpClient = inject(HttpClient);
   private readonly APIUrl = environment.apiUrl;
-  private readonly token = environment.token;
+  private token: string | null = sessionStorage.getItem('token');
 
   private readonly APIUrlBook = `${this.APIUrl}/books`;
   private readonly APIUrlCategory = `${this.APIUrl}/books/category`;

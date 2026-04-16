@@ -37,23 +37,7 @@ export class AuthService {
   private hasToken(): boolean {
     return !!sessionStorage.getItem('token');
   }
-
-  getEmail() {
-    const token = localStorage.getItem('token');
-    if (!token) return '';
-    try {
-      const decoded: any = jwtDecode(token);
-      console.log('Contenu du token décodé :', decoded); // <--- AJOUTE CECI
-     
-      // Souvent dans Spring Security, l'email est dans 'sub' ou 'username'
-      return decoded.email || decoded.sub || '';
-    } catch (e) {
-      console.error('Erreur décodage token', e);
-      return '';
-    }
-  }
  
-
   // Getter pour s'abonner à l'état de connexion (ex: cacher/afficher des menus)
   get isLoggedIn$() {
     return this.authStatus.asObservable();
