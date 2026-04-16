@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookInterface } from '../../models/book-interface';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,25 +24,22 @@ export class Home implements OnInit {
 
   readonly currentPage = signal<number>(0);
   readonly totalPages  = signal<number>(0);
-
-  readonly allCategories = signal<string[]>([]);
-
   readonly selectedCategory= signal<string>("");
-
+  readonly selectedStatus= signal<string>("");
   public books = signal<BookInterface[]>([])
 
-  categories = computed(() => {
-    const allCategories = this.books().map(book => book.category);
-    return [...new Set(allCategories)].sort();
-  })
+  readonly categories = this.bookApiService.categories;
+  readonly status = this.bookApiService.status;
 
   ngOnInit(): void {
+    forkJoin([
+      this.bookApiService.getCategories(),
+      this.bookApiService.getStatus(),
+    ]).subscribe();
+
     this.route.queryParamMap.subscribe(params => {
-
       const pageUrl = Number(params.get('page') ?? 1);
-
       const internalPage = pageUrl > 0 ? pageUrl - 1 : 0;
-
       const category = params.get('category') ?? "";
       const status = params.get('status') ?? "";
 
@@ -52,10 +50,8 @@ export class Home implements OnInit {
     });
   }
 
-  onCategoryChange(event: Event) {
-    const element = event.target as HTMLSelectElement;
-    const category = element.value;
-  
+  onCategoryChange(event: Event): void {
+    const category = (event.target as HTMLSelectElement).value;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { 
@@ -66,21 +62,22 @@ export class Home implements OnInit {
     });
   }
 
+  onStatusChange(event: Event): void {
+    const status = (event.target as HTMLSelectElement).value;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: 1, status: status || null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   private loadBooks(page: number, category: string, status: string): void {
 
     this.bookApiService.getBooks(page, category, status).subscribe({
       next: (response) => {
         console.log(category, status)
-        const content = response?.content ?? []; 
-        const total = response?.totalPages ?? 0;
-
-        this.books.set(content);
-        this.totalPages.set(total);
-
-        if(this.allCategories().length === 0 && !category) {
-          const uniqueCats = [...new Set(content.map(b => b.category))].sort();
-          this.allCategories.set(uniqueCats);
-        }
+        this.books.set(response?.content ?? []);
+        this.totalPages.set(response?.totalPages ?? 0);
       },
       error: (err) => console.error('Erreur :', err)
     });

@@ -13,11 +13,58 @@ export class BookApi {
 
   private readonly http: HttpClient = inject(HttpClient);
   private readonly APIUrl = environment.apiUrl;
-  private readonly APIUrlBook = `${this.APIUrl}/books`;
-  private readonly APIUrlLoan = `${this.APIUrl}/loans`
   private readonly token = environment.token;
+
+  private readonly APIUrlBook = `${this.APIUrl}/books`;
+  private readonly APIUrlCategory = `${this.APIUrl}/books/category`;
+  private readonly APIUrlStatus = `${this.APIUrl}/books/status`;
+  private readonly APIUrlLoan = `${this.APIUrl}/loans`
+
+  
   private _books = signal<BookInterface[]>([]);
+  private _categories = signal<string[]>([]);
+  private _status = signal<string[]>([]);
+
   public readonly books = this._books.asReadonly();
+  public readonly categories = this._categories.asReadonly();
+  public readonly status = this._status.asReadonly();
+
+
+  getCategories(): Observable<string[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http
+    .get<string[]>(this.APIUrlCategory, {headers})
+    .pipe(
+      tap(res => {
+        if (res.length) {
+          this._categories.set(res)
+        } else {
+          this._categories.set([]);
+        }
+      }
+      ));
+  }
+
+  getStatus(): Observable<string[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http
+    .get<string[]>(this.APIUrlStatus, {headers})
+    .pipe(
+      tap(res => {
+        if (res.length) {
+          this._status.set(res)
+        } else {
+          this._status.set([]);
+        }
+      }
+      ));
+  }  
 
   getBooks(page: number = 0, category?: string, status?: string): Observable<PageInterface<BookInterface>> {
     const headers = new HttpHeaders({
