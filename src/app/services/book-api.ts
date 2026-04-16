@@ -20,7 +20,7 @@ export class BookApi {
   private readonly APIUrlStatus = `${this.APIUrl}/books/status`;
   private readonly APIUrlLoan = `${this.APIUrl}/loans`
   private readonly APIUrlSearchBook = `${this.APIUrl}/books/search`;
-  
+
   private _books = signal<BookInterface[]>([]);
   private _categories = signal<string[]>([]);
   private _status = signal<string[]>([]);
@@ -85,7 +85,7 @@ export class BookApi {
         }
       }
       ));
-  }  
+  }
 
   getBooks(page: number = 0, category?: string, status?: string): Observable<PageInterface<BookInterface>> {
     const headers = new HttpHeaders({
@@ -112,9 +112,18 @@ export class BookApi {
 
   loanABook(loan: Loan): Observable<Loan>{
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.post<Loan>(this.APIUrlLoan, loan, {headers})
+    return this.http.post<Loan>(this.APIUrlLoan, loan, { headers });
+  }
+
+  saveABook(book: any) {
+    console.log('saveABook');
+    console.log(book);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+    return this.http.post(this.APIUrlBook, book, { headers });
   }
 }

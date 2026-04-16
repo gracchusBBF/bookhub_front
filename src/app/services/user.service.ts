@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user.model';
 import { Observable, tap } from 'rxjs';
-
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ import { Observable, tap } from 'rxjs';
 export class UserService {
 
   private token = sessionStorage.getItem('token');
-  readonly url = 'http://localhost:8080/api/users';
+  readonly url = `${environment.apiUrl}/users`
 
   private http = inject(HttpClient);
   private _users = signal<User[]>([]);

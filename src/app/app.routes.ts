@@ -9,25 +9,42 @@ import { AuthGuard } from './guards/AuthGuard';
 import { isRoleAllowed } from './guards/isRoleAllowed';
 
 export const routes: Routes = [
-    {
-        path: '', component: Home, canActivate: [AuthGuard]
-    },
-    {
-        path: 'connexion', component: Connexion
-    },
-    {
-        path: 'user', component: DashboardUser, canActivate: [AuthGuard],
-    },
-    {
-        path: 'librarian', component: DashboardLibrarian, canActivate: [AuthGuard, isRoleAllowed(["ROLE_ADMIN", "ROLE_LIBRARIAN"])]
-    },
-    {
-        path:  'admin', component: DashboardAdmin, canActivate: [AuthGuard, isRoleAllowed(["ROLE_ADMIN"])]
-    },
-    {
-        path:  'deleted-account', component: DeleteAccountFallback, canActivate: [AuthGuard]
-    },
-    {
-        path: '**', redirectTo: '', pathMatch: "full"
-    }
+  {
+    path: '',
+    component: Home,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'connexion',
+    component: Connexion,
+  },
+  {
+    path: 'user',
+    component: DashboardUser,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'librarian',
+    component: DashboardLibrarian,
+    canActivate: [AuthGuard, isRoleAllowed(['ROLE_ADMIN', 'ROLE_LIBRARIAN'])],
+  },
+  {
+    path: 'librarian/books',
+    component: Home,
+  },
+  {
+    path: 'admin',
+    component: DashboardAdmin,
+    canActivate: [AuthGuard, isRoleAllowed(['ROLE_ADMIN'])],
+  },
+  {
+    path: 'deleted-account',
+    component: DeleteAccountFallback,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
 ];
