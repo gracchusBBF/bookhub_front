@@ -3,7 +3,7 @@ export interface CommentInterface {
     rate: number
     comment: string
     status: string
-    userId: number
+    userEmail: string
     userFirstName: string
     userLastName: string
     bookId: number

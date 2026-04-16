@@ -1,6 +1,6 @@
 
   <header>
-    <div class="logo">BookHub</div>
+    <div class="logo" routerLink="/" routerLinkActive="active">BookHub</div>
     @if (authService.isLoggedIn$ | async) {
     <nav>
         <ul>
