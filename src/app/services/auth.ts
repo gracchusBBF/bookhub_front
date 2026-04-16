@@ -37,7 +37,7 @@ export class AuthService {
   private hasToken(): boolean {
     return !!sessionStorage.getItem('token');
   }
-
+ 
   // Getter pour s'abonner à l'état de connexion (ex: cacher/afficher des menus)
   get isLoggedIn$() {
     return this.authStatus.asObservable();

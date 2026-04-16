@@ -28,6 +28,6 @@ export const routes: Routes = [
         path:  'deleted-account', component: DeleteAccountFallback, canActivate: [AuthGuard]
     },
     {
-        path: '**', redirectTo: ''
+        path: '**', redirectTo: '', pathMatch: "full"
     }
 ];
