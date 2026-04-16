@@ -1,1 +1,40 @@
-<p>book-card works!</p>
+<mat-card class="book-card">
+    <div class="top-part-card">
+        @if(isDetails) {
+            <p>Mettre la modale de commentaire/détail ici</p>
+        }         
+        <mat-card-header style="text-align: center;">
+            <mat-card-title>{{ book.title }}</mat-card-title>
+            <mat-card-subtitle>{{ book.firstName}} {{book.lastName}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{ book.status === "AVAILABLE" ? "Disponible" : "Indisponible"  }}</p>
+        </mat-card-content>
+    </div>
+    <div class="img-card">
+        <img mat-card-image [src]="book.frontCoverImg" [alt]="book.title">
+    </div>
+    <section>
+
+        @if(isModal) {
+            <div class="dialog-modal">
+                @if(book.status === "AVAILABLE") {
+                  <button matButton="elevated" (click)="loan()">Oui</button>
+                  <button matButton="elevated" (click)="isModal = false">Non</button>
+                } @else {
+                  <button matButton="elevated" (click)="reserve()">Oui</button>
+                  <button matButton="elevated" (click)="isModal = false">Non</button>
+                }
+              </div>
+        } @else {
+            <div class="example-button-row">
+                <button class = "loan-reserve" matButton="elevated" (click)="isModal = true">
+                    {{ book.status === "AVAILABLE" ? "Emprunter" : "Réserver" }}
+                </button>
+                <button class = "details" matButton="elevated" (click)="moreDetails()">Détails</button>
+            </div>
+        }
+
+    </section>
+
+</mat-card>

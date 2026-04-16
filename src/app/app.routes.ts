@@ -36,4 +36,7 @@ export const routes: Routes = [
     path: 'deleted-account',
     component: DeleteAccountFallback,
   },
+  {
+    path: '**', redirectTo: "", pathMatch: "full"
+  }
 ];
