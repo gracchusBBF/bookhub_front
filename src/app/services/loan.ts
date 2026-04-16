@@ -21,6 +21,6 @@ export class LoanService {
   constructor(private http: HttpClient) {}
 
   getLoansByUserEmail(email: string): Observable<LoanDTO[]> {
-    return this.http.get<LoanDTO[]>(`${this.apiUrl}/${email}`);
+    return this.http.get<LoanDTO[]>(`${this.apiUrl}/user/${email}`);
   }
 }

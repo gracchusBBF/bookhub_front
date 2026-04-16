@@ -40,11 +40,16 @@
       <section class="table-group">
         <div class="table-header">
           <h3>Mes emprunts</h3>
-          <mat-button-toggle-group name="loanStatus" aria-label="Status Emprunt" value="en-cours">
-            <mat-button-toggle value="en-cours">en cours</mat-button-toggle>
-            <mat-button-toggle value="historique">historique</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
+          <mat-button-toggle-group 
+          #group="matButtonToggleGroup" 
+          name="loanStatus" 
+          value="en-cours"
+          (change)="filterLoans(group.value)">
+  
+        <mat-button-toggle value="en-cours">en cours</mat-button-toggle>
+        <mat-button-toggle value="historique">historique</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
         <div class="table-wrapper">
           <table mat-table [dataSource]="empruntsSource" class="custom-table">
@@ -55,18 +60,25 @@
             </ng-container>
 
             <ng-container matColumnDef="dateRetour">
-              <th mat-header-cell *matHeaderCellDef> à rendre le </th>
+              <th mat-header-cell *matHeaderCellDef> date de retour </th>
               <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="retard">
               <th mat-header-cell *matHeaderCellDef> statut </th>
               <td mat-cell *matCellDef="let element">
-                <span [class.text-danger]="isOverdue(element.deadline)" 
-                      [style.color]="isOverdue(element.deadline) ? '#f44336' : '#4caf50'"
-                      [style.font-weight]="'bold'">
-                  {{ isOverdue(element.deadline) ? 'Retard' : 'OK' }}
+                
+                <span *ngIf="element.returnDate" style="color: #9e9e9e; font-style: italic;">
+                  Rendu
                 </span>
+            
+                <span *ngIf="!element.returnDate"
+                      [class.text-danger]="isOverdue(element)" 
+                      [style.color]="isOverdue(element) ? '#f44336' : '#4caf50'"
+                      [style.font-weight]="'bold'">
+                  {{ isOverdue(element) ? 'Retard' : 'En cours' }}
+                </span>
+            
               </td>
             </ng-container>
 

@@ -29,6 +29,7 @@ interface Reservation {
   position: string;
 }
 
+
 @Component({
   selector: 'app-dashboard-user',
   standalone: true,
@@ -55,6 +56,7 @@ export class DashboardUser implements OnInit {
   ) {}
   
   // Données de test (à remplacer plus tard par un appel API)
+  allLoans: LoanDTO[] = [];
   empruntsSource: LoanDTO[] = []
   user: UserDataDTO | null = null;
   reservationsSource: Reservation[] = [
@@ -66,29 +68,52 @@ export class DashboardUser implements OnInit {
     const email = this.authService.getEmail();
     
     if (email) {
-      // 1. Récupération des emprunts (Ton code existant)
+      // 1. Récupération des emprunts
       this.loanService.getLoansByUserEmail(email).subscribe({
         next: (data) => {
-          this.empruntsSource = data;
+          this.allLoans = data; 
+          this.empruntsSource = this.allLoans.filter(loan => !loan.returnDate);
           this.cdr.detectChanges();
         },
         error: (err) => console.error("Erreur prêts:", err)
       });
-
-      // 2. Récupération des infos profil (Le nouvel ajout)
+  
+      // 2. Récupération des infos profil
       this.userService.getUser(email).subscribe({
         next: (userData: UserDataDTO) => {
-          this.user = userData; // On stocke les infos pour l'affichage
+          this.user = userData;
           this.cdr.detectChanges();
         },
         error: (err) => console.error("Erreur profil:", err)
       });
     }
-}
-  isOverdue(deadline: string): boolean {
-    if (!deadline) return false;
-    return new Date(deadline) < new Date();
   }
+filterLoans(status: string) {
+  if (status === 'en-cours') {
+    this.empruntsSource = this.allLoans.filter(loan => !loan.returnDate);
+  } else {
+    this.empruntsSource = this.allLoans.filter(loan => !!loan.returnDate);
+  }
+  this.cdr.detectChanges();
+}
+isOverdue(loan: LoanDTO): boolean {
+  // 1. Si returnDate existe (n'est pas null ou vide), le livre est rendu.
+  // On exclut donc ce prêt des retards.
+  if (loan.returnDate) {
+    return false;
+  }
+
+  // 2. Si on n'a pas de deadline, on ne peut pas dire s'il y a un retard.
+  if (!loan.deadline) {
+    return false;
+  }
+
+  // 3. Comparaison : si la date du jour est après la deadline
+  const today = new Date();
+  const deadlineDate = new Date(loan.deadline);
+
+  return deadlineDate < today;
+}
   onLogout() {
     // Logique de déconnexion si nécessaire ici aussi
   }
