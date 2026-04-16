@@ -32,13 +32,12 @@ export class BookCard {
   }
 
   moreDetails() {
-    // On ouvre la modale en passant les données du livre
     this.dialog.open(BookDialog, {
       width: '90vw',
-  height: '90vh',
-  maxWidth: '90vw',// ou la largeur que tu souhaites
+      height: '90vh',
+      maxWidth: '90vw',
       data: { book: this.book },
-      // panelClass: 'custom-modalbox' // Optionnel pour styliser le fond
+      panelClass: 'book-details-dialog'
     });
   }
 

@@ -5,6 +5,7 @@ import { Observable, tap } from 'rxjs';
 import { BookInterface } from '../models/book-interface';
 import { Loan } from '../models/loan';
 import { PageInterface } from '../models/page-interface';
+import { CommentInterface } from '../models/comment-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,22 +14,52 @@ export class BookApi {
 
   private readonly http: HttpClient = inject(HttpClient);
   private readonly APIUrl = environment.apiUrl;
-  private readonly token = environment.token;
+  private token: string | null = sessionStorage.getItem('token');
 
   private readonly APIUrlBook = `${this.APIUrl}/books`;
   private readonly APIUrlCategory = `${this.APIUrl}/books/category`;
   private readonly APIUrlStatus = `${this.APIUrl}/books/status`;
-  private readonly APIUrlLoan = `${this.APIUrl}/loans`
+  private readonly APIUrlLoan = `${this.APIUrl}/loans`;
+  private readonly APIUrlBookComment = `${this.APIUrl}/comments/book`;
+  private readonly APIUrlComment = `${this.APIUrl}/comments`;
 
   
   private _books = signal<BookInterface[]>([]);
   private _categories = signal<string[]>([]);
   private _status = signal<string[]>([]);
+  private _comments = signal<CommentInterface[]>([]);
 
   public readonly books = this._books.asReadonly();
   public readonly categories = this._categories.asReadonly();
   public readonly status = this._status.asReadonly();
+  public readonly comments = this._comments.asReadonly();
 
+  getCommentsByBookId(bookId: number): Observable<CommentInterface[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http
+      .get<CommentInterface[]>(`${this.APIUrlBookComment}/${bookId}`, {headers})
+      .pipe(
+        tap(res => {
+          if(res.length) {
+            this._comments.set(res);
+          } else {
+            this._comments.set([]);
+          }
+        })
+      );
+  }
+
+  addComment(comment: Partial<CommentInterface>): Observable<CommentInterface> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http
+      .post<CommentInterface>(this.APIUrlComment, comment, {headers});
+  }
 
   getCategories(): Observable<string[]> {
     const headers = new HttpHeaders({
