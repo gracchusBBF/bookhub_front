@@ -5,12 +5,14 @@ import { DashboardAdmin } from './pages/dashboard-admin/dashboard-admin';
 import { DashboardUser } from './pages/dashboard-user/dashboard-user';
 import { DashboardLibrarian } from './pages/dashboard-librarian/dashboard-librarian';
 import {DeleteAccountFallback} from './pages/delete-account-fallback/delete-account-fallback'
-import { BookManagement } from './pages/book-management/book-management';
+import { AuthGuard } from './guards/AuthGuard';
+import { isRoleAllowed } from './guards/isRoleAllowed';
 
 export const routes: Routes = [
   {
     path: '',
     component: Home,
+    canActivate: [AuthGuard],
   },
   {
     path: 'connexion',
@@ -19,24 +21,30 @@ export const routes: Routes = [
   {
     path: 'user',
     component: DashboardUser,
+    canActivate: [AuthGuard],
   },
   {
     path: 'librarian',
-    component: DashboardLibrarian
+    component: DashboardLibrarian,
+    canActivate: [AuthGuard, isRoleAllowed(['ROLE_ADMIN', 'ROLE_LIBRARIAN'])],
   },
   {
     path: 'librarian/books',
-    component: BookManagement,
+    component: Home,
   },
   {
     path: 'admin',
     component: DashboardAdmin,
+    canActivate: [AuthGuard, isRoleAllowed(['ROLE_ADMIN'])],
   },
   {
     path: 'deleted-account',
     component: DeleteAccountFallback,
+    canActivate: [AuthGuard],
   },
   {
-    path: '**', redirectTo: "", pathMatch: "full"
-  }
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
 ];
