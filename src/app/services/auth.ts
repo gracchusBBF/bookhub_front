@@ -28,14 +28,14 @@ export class AuthService {
   // Stocke le token et met à jour l'état
   private handleAuthentication(response: any) {
     if (response && response.token) {
-      localStorage.setItem('token', response.token);
+      sessionStorage.setItem('token', response.token);
       this.authStatus.next(true);
     }
   }
 
   // Pour savoir si on est connecté (au démarrage ou ailleurs)
   private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 
   getEmail() {
@@ -61,7 +61,7 @@ export class AuthService {
 
   // Récupérer le rôle pour la redirection
   getUserRole(): string {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return '';
     try {
       const decoded: any = jwtDecode(token);
@@ -71,9 +71,27 @@ export class AuthService {
       return '';
     }
   }
-
+  
+  getEmail() {
+    const token = sessionStorage.getItem('token');
+    if (!token) return '';
+    try {
+      const decoded: any = jwtDecode(token);
+      console.log('Contenu du token décodé :', decoded); // <--- AJOUTE CECI
+      
+      // Souvent dans Spring Security, l'email est dans 'sub' ou 'username'
+      return decoded.email || decoded.sub || ''; 
+    } catch (e) {
+      console.error('Erreur décodage token', e);
+      return '';
+    }
+  }
+  changePassword(data: any): Observable<any> {
+    // L'URL doit correspondre à ton @PutMapping("/change-password") côté Java
+    return this.http.put(`http://localhost:8080/api/users/change-password`, data);
+  }
   logout() {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     this.authStatus.next(false);
   }
 }
