@@ -55,6 +55,7 @@ export class Login {
     }
   }
   private redirectBasedOnRole(role: string) {
+    console.log(role)
     if (role === 'ROLE_ADMIN') {
       this.router.navigate(['/admin']);
     } else if (role === 'ROLE_LIBRARIAN') {

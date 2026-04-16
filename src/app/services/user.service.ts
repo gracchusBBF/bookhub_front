@@ -9,15 +9,12 @@ import { Observable, tap } from 'rxjs';
 })
 export class UserService {
 
+  private token = sessionStorage.getItem('token');
+  readonly url = 'http://localhost:8080/api/users';
+
   private http = inject(HttpClient);
   private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
-
-  private tokenSto = sessionStorage.getItem('token');
-
-  readonly url = 'http://localhost:8080/api/users';
-
-  private readonly token = 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6InRlc3RAYm9va2h1Yi5jb20iLCJpYXQiOjE3NzYzMzIyNjMsImV4cCI6MTc3NjMzNTg2M30.ktDg19VfTWsiB2wzQta0Ygm3b-qvAosi-8sHt7dnI8c'
   
   private get authHeaders(): HttpHeaders {
     return new HttpHeaders({ Authorization: `Bearer ${this.token}` });
