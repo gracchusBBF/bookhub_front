@@ -2,12 +2,12 @@
   <header class="filter-search-top">
 
       <mat-form-field class="example-form-field">
-    <input matInput 
-    type="text" 
-    [(ngModel)]="value" 
+    <input matInput
+    type="text"
+    [(ngModel)]="value"
     placeholder="Saisir un isbn, un auteur ou titre"
     (keyup.enter)="onSearch()"
-    
+
     />
     @if (value) {
       <button matSuffix matIconButton aria-label="Clear" (click)="onClearSearch()">
@@ -17,25 +17,25 @@
   </mat-form-field>
 
   <div>
-<select 
-    class="filter-category" 
-    [value]="selectedCategory()" 
+<select
+    class="filter-category"
+    [value]="selectedCategory()"
     (change)="onCategoryChange($event)">
-    
+
     <option value="">Toutes les catégories</option>
-    
+
     @for(cat of categories(); track cat) {
       <option [value]="cat">{{ cat }}</option>
     }
   </select>
 
-  <select 
-    class="filter-status" 
-    [value]="selectedStatus()" 
+  <select
+    class="filter-status"
+    [value]="selectedStatus()"
     (change)="onStatusChange($event)">
-    
+
     <option value="">Toutes les catégories</option>
-    
+
     @for(s of status(); track s) {
       <option [value]="s">
         {{ s === "AVAILABLE" ? "Disponible" : "Indisponible"}}
@@ -44,8 +44,19 @@
   </select>
 
   </div>
-  
+
   </header>
+  @if (authService.getUserRole() === "ROLE_LIBRARIAN") {
+    <div class="section-librarian">
+      <button
+        matButton="elevated"
+        (click)="handleAddBookClick()"
+      >
+        <mat-icon>add</mat-icon>
+        Ajouter un livre
+      </button>
+    </div>
+  }
 
 
   <div class="books-container">
@@ -62,7 +73,7 @@
       (click)="goToPage(currentPage() - 1)">
       <mat-icon>chevron_left</mat-icon>
     </button>
-  
+
     @for (page of pages; track page) {
       <button mat-button
         [class.active]="page === currentPage()"
@@ -70,12 +81,12 @@
         {{ page + 1 }}
       </button>
     }
-  
+
     <button mat-icon-button
       [disabled]="currentPage() === totalPages() - 1"
       (click)="goToPage(currentPage() + 1)">
       <mat-icon>chevron_right</mat-icon>
     </button>
-  
+
   </nav>
 </section>
