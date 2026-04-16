@@ -1,1 +1,81 @@
-<p>home works!</p>
+<section class="section-home">
+  <header class="filter-search-top">
+
+      <mat-form-field class="example-form-field">
+    <input matInput 
+    type="text" 
+    [(ngModel)]="value" 
+    placeholder="Saisir un isbn, un auteur ou titre"
+    (keyup.enter)="onSearch()"
+    
+    />
+    @if (value) {
+      <button matSuffix matIconButton aria-label="Clear" (click)="onClearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <div>
+<select 
+    class="filter-category" 
+    [value]="selectedCategory()" 
+    (change)="onCategoryChange($event)">
+    
+    <option value="">Toutes les catégories</option>
+    
+    @for(cat of categories(); track cat) {
+      <option [value]="cat">{{ cat }}</option>
+    }
+  </select>
+
+  <select 
+    class="filter-status" 
+    [value]="selectedStatus()" 
+    (change)="onStatusChange($event)">
+    
+    <option value="">Toutes les catégories</option>
+    
+    @for(s of status(); track s) {
+      <option [value]="s">
+        {{ s === "AVAILABLE" ? "Disponible" : "Indisponible"}}
+      </option>
+    }
+  </select>
+
+  </div>
+  
+  </header>
+
+
+  <div class="books-container">
+    @for (book of books(); track book.id) {
+      <app-book-card [book]="book"></app-book-card>
+    } @empty {
+      <p>Aucun livre trouvé ou chargement en cours...</p>
+    }
+  </div>
+  <nav class="pagination">
+
+    <button mat-icon-button
+      [disabled]="currentPage() === 0"
+      (click)="goToPage(currentPage() - 1)">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+  
+    @for (page of pages; track page) {
+      <button mat-button
+        [class.active]="page === currentPage()"
+        (click)="goToPage(page)">
+        {{ page + 1 }}
+      </button>
+    }
+  
+    <button mat-icon-button
+      [disabled]="currentPage() === totalPages() - 1"
+      (click)="goToPage(currentPage() + 1)">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  
+  </nav>
+</section>
