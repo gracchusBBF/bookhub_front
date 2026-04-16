@@ -8,10 +8,11 @@ import { BookApi } from '../../services/book-api';
 import { AuthService } from '../../services/auth';
 import { Loan } from '../../models/loan';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Ajoute ceci
+import { BookDialog } from '../book-dialog/book-dialog'; // Importe ton composant de modale
 @Component({
   selector: 'app-book-card',
-  imports: [MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [MatDialogModule, MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
   templateUrl: './book-card.html',
   styleUrl: './book-card.css',
 })
@@ -19,7 +20,7 @@ export class BookCard {
   @Input({required: true}) book! : BookInterface;
 
   constructor(protected _snackBar: MatSnackBar) {}
-  
+  private readonly dialog = inject(MatDialog);
   protected readonly authService = inject(AuthService);
   protected readonly bookApiService = inject(BookApi);
 
@@ -31,7 +32,14 @@ export class BookCard {
   }
 
   moreDetails() {
-    this.isDetails = !this.isDetails
+    // On ouvre la modale en passant les données du livre
+    this.dialog.open(BookDialog, {
+      width: '90vw',
+  height: '90vh',
+  maxWidth: '90vw',// ou la largeur que tu souhaites
+      data: { book: this.book },
+      // panelClass: 'custom-modalbox' // Optionnel pour styliser le fond
+    });
   }
 
   loan() {
