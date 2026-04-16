@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import { BookInterface } from '../../models/book-interface';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,8 +8,9 @@ import { BookApi } from '../../services/book-api';
 import { AuthService } from '../../services/auth';
 import { Loan } from '../../models/loan';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Ajoute ceci
-import { BookDialog } from '../book-dialog/book-dialog'; // Importe ton composant de modale
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { BookDialog } from '../book-dialog/book-dialog'; 
+
 @Component({
   selector: 'app-book-card',
   imports: [MatDialogModule, MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
@@ -17,19 +18,19 @@ import { BookDialog } from '../book-dialog/book-dialog'; // Importe ton composan
   styleUrl: './book-card.css',
 })
 export class BookCard {
-  @Input({required: true}) book! : BookInterface;
+  @Input({required: true}) book!: BookInterface;
 
-  constructor(protected _snackBar: MatSnackBar) {}
+  constructor(
+    protected _snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   private readonly dialog = inject(MatDialog);
   protected readonly authService = inject(AuthService);
   protected readonly bookApiService = inject(BookApi);
 
   isModal: boolean = false;
-  isDetails : boolean = false;
-
-  showModal() {
-    this.isModal = !this.isModal
-  }
+  isDetails: boolean = false;
 
   moreDetails() {
     this.dialog.open(BookDialog, {
@@ -45,6 +46,8 @@ export class BookCard {
     const email = this.authService.getEmail();
     if (!email) {
       console.error("Email utilisateur non disponible !");
+      this.isModal = false;
+      this.cdr.detectChanges();
       return;
     }
     const loan: Loan = {
@@ -55,26 +58,35 @@ export class BookCard {
       userEmail: email,
       bookId: this.book.id,
       bookTitle: this.book.title
-    }
+    };
 
     this.bookApiService.loanABook(loan).subscribe({
       next: (response) => {
         this._snackBar.open("Emprunt réussi !", "Fermer", {
-          duration: 3000, 
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
         });
         this.isModal = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this._snackBar.open("Erreur lors de l'emprunt", "Réessayer", {
           duration: 5000,
           panelClass: ['error-snackbar']
         });
-    }})
+        this.isModal = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   reserve() {
-    console.log("Reserve !")
+    this._snackBar.open("Réservation réussie !", "Fermer", {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+    this.isModal = false;
   }
 }

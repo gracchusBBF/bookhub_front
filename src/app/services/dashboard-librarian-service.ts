@@ -13,7 +13,7 @@ const baseURL = `${protocol}://${host}:${port}/api/loans`;
 })
 export class DashboardLibrarianService {
   private readonly http = inject(HttpClient);
-  private token: string | null = localStorage.getItem('token');
+  private token: string | null = sessionStorage.getItem('token');
 
   getLoansList() {
     return this.http.get<[]>(baseURL, {

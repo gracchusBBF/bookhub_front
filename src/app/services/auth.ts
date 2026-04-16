@@ -9,9 +9,9 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
   private http = inject(HttpClient);
-
+  
   // Un BehaviorSubject permet de diffuser l'état de connexion partout dans l'app
-  private authStatus = new BehaviorSubject<boolean>(this.hasToken());
+  public authStatus = new BehaviorSubject<boolean>(this.hasToken());
 
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, userData).pipe(
@@ -37,7 +37,7 @@ export class AuthService {
   private hasToken(): boolean {
     return !!sessionStorage.getItem('token');
   }
-
+ 
   
   // Getter pour s'abonner à l'état de connexion (ex: cacher/afficher des menus)
   get isLoggedIn$() {

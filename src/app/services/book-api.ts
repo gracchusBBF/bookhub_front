@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { BookInterface } from '../models/book-interface';
 import { Loan } from '../models/loan';
 import { PageInterface } from '../models/page-interface';
@@ -19,14 +19,15 @@ export class BookApi {
   private readonly APIUrlBook = `${this.APIUrl}/books`;
   private readonly APIUrlCategory = `${this.APIUrl}/books/category`;
   private readonly APIUrlStatus = `${this.APIUrl}/books/status`;
-  private readonly APIUrlLoan = `${this.APIUrl}/loans`;
+  private readonly APIUrlLoan = `${this.APIUrl}/loans`
+  private readonly APIUrlSearchBook = `${this.APIUrl}/books/search`;
   private readonly APIUrlBookComment = `${this.APIUrl}/comments/book`;
   private readonly APIUrlComment = `${this.APIUrl}/comments`;
 
-  
   private _books = signal<BookInterface[]>([]);
   private _categories = signal<string[]>([]);
   private _status = signal<string[]>([]);
+  private _searchedBooks = signal<BookInterface[]>([]);
   private _comments = signal<CommentInterface[]>([]);
 
   public readonly books = this._books.asReadonly();
@@ -34,6 +35,7 @@ export class BookApi {
   public readonly status = this._status.asReadonly();
   public readonly comments = this._comments.asReadonly();
 
+  
   getCommentsByBookId(bookId: number): Observable<CommentInterface[]> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -59,6 +61,27 @@ export class BookApi {
 
     return this.http
       .post<CommentInterface>(this.APIUrlComment, comment, {headers});
+  }
+
+  getSearchedBooks(query: string): Observable<BookInterface[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    const params = new HttpParams().set('query', query);
+
+    return this.http
+      .get<BookInterface[]>(this.APIUrlSearchBook, {headers, params})
+      .pipe(
+        tap((res: BookInterface[]) => {
+          this._searchedBooks.set(res);
+        }),
+        catchError((error) => {
+          console.error('Error fetching books:', error);
+          this._searchedBooks.set([]);
+          return [];
+        })
+      );
   }
 
   getCategories(): Observable<string[]> {
@@ -95,7 +118,7 @@ export class BookApi {
         }
       }
       ));
-  }  
+  }
 
   getBooks(page: number = 0, category?: string, status?: string): Observable<PageInterface<BookInterface>> {
     const headers = new HttpHeaders({
@@ -122,9 +145,18 @@ export class BookApi {
 
   loanABook(loan: Loan): Observable<Loan>{
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
     });
 
-    return this.http.post<Loan>(this.APIUrlLoan, loan, {headers})
+    return this.http.post<Loan>(this.APIUrlLoan, loan, { headers });
+  }
+
+  saveABook(book: any) {
+    console.log('saveABook');
+    console.log(book);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+    return this.http.post(this.APIUrlBook, book, { headers });
   }
 }
