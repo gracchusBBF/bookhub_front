@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { BookApi } from '../../services/book-api';
 import { BookCard } from '../../components/book-card/book-card';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,6 +30,7 @@ export class Home implements OnInit {
 
   readonly categories = this.bookApiService.categories;
   readonly status = this.bookApiService.status;
+  value = '';
 
   ngOnInit(): void {
     forkJoin([
@@ -42,11 +43,42 @@ export class Home implements OnInit {
       const internalPage = pageUrl > 0 ? pageUrl - 1 : 0;
       const category = params.get('category') ?? "";
       const status = params.get('status') ?? "";
+      const query = params.get('query') ?? "";
 
       this.currentPage.set(internalPage);
       this.selectedCategory.set(category.toLowerCase());
+      this.value = query;
 
-      this.loadBooks(internalPage, category, status!);
+      if(query) {
+        this.bookApiService.getSearchedBooks(query).subscribe(books => this.books.set(books));
+      } else {
+        this.loadBooks(internalPage, category, status);
+      }
+    });
+  }
+
+  onSearch():void {
+    if(!this.value.trim()) return;
+    this.bookApiService.getSearchedBooks(this.value).subscribe({
+      next: (books) => {
+        this.books.set(books);
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { query: this.value, page: 1 },
+          queryParamsHandling: 'merge',
+        });
+    },
+      error: (err) => console.error('Erreur de recherche :', err)
+    });
+  }
+
+  onClearSearch(): void {
+    this.value = '';
+    this.loadBooks(this.currentPage(), this.selectedCategory(), this.selectedStatus());
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { query: null },
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -96,5 +128,5 @@ export class Home implements OnInit {
   }
 
 
-  value = '';
+  
 }

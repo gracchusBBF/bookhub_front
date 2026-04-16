@@ -3,6 +3,26 @@
     min-height: 100vh; 
 }
 
+header {
+    display: flex;
+    justify-content: space-around;
+    height: 50px;
+    align-items: center;
+    margin-top : 25px;
+}
+
+header div {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+header div select {
+   height: 25px;
+}
+
+
 .books-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -17,7 +37,6 @@
 
 mat-form-field {
     text-align: center;
-    margin: 10px 0 0 50px ;
     width: 500px !important;
 }
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { BookInterface } from '../models/book-interface';
 import { Loan } from '../models/loan';
 import { PageInterface } from '../models/page-interface';
@@ -19,16 +19,37 @@ export class BookApi {
   private readonly APIUrlCategory = `${this.APIUrl}/books/category`;
   private readonly APIUrlStatus = `${this.APIUrl}/books/status`;
   private readonly APIUrlLoan = `${this.APIUrl}/loans`
-
+  private readonly APIUrlSearchBook = `${this.APIUrl}/books/search`;
   
   private _books = signal<BookInterface[]>([]);
   private _categories = signal<string[]>([]);
   private _status = signal<string[]>([]);
+  private _searchedBooks = signal<BookInterface[]>([]);
 
   public readonly books = this._books.asReadonly();
   public readonly categories = this._categories.asReadonly();
   public readonly status = this._status.asReadonly();
 
+  getSearchedBooks(query: string): Observable<BookInterface[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    const params = new HttpParams().set('query', query);
+
+    return this.http
+      .get<BookInterface[]>(this.APIUrlSearchBook, {headers, params})
+      .pipe(
+        tap((res: BookInterface[]) => {
+          this._searchedBooks.set(res);
+        }),
+        catchError((error) => {
+          console.error('Error fetching books:', error);
+          this._searchedBooks.set([]);
+          return [];
+        })
+      );
+  }
 
   getCategories(): Observable<string[]> {
     const headers = new HttpHeaders({

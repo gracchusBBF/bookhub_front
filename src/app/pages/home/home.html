@@ -1,14 +1,23 @@
 <section class="section-home">
-  <mat-form-field class="example-form-field">
-    <input matInput type="text" [(ngModel)]="value" placeholder="Saisir un isbn, un auteur ou titre"/>
+  <header class="filter-search-top">
+
+      <mat-form-field class="example-form-field">
+    <input matInput 
+    type="text" 
+    [(ngModel)]="value" 
+    placeholder="Saisir un isbn, un auteur ou titre"
+    (keyup.enter)="onSearch()"
+    
+    />
     @if (value) {
-      <button matSuffix matIconButton aria-label="Clear" (click)="value=''">
+      <button matSuffix matIconButton aria-label="Clear" (click)="onClearSearch()">
         <mat-icon>close</mat-icon>
       </button>
     }
   </mat-form-field>
 
-  <select 
+  <div>
+<select 
     class="filter-category" 
     [value]="selectedCategory()" 
     (change)="onCategoryChange($event)">
@@ -33,6 +42,11 @@
       </option>
     }
   </select>
+
+  </div>
+  
+  </header>
+
 
   <div class="books-container">
     @for (book of books(); track book.id) {

@@ -19,16 +19,16 @@
         @if(isModal) {
             <div class="dialog-modal">
                 @if(book.status === "AVAILABLE") {
-                    <button matButton="elevated" (click)="loan()">Oui</button>
-                    <button matButton="elevated" (click)="showModal()">Non</button>
+                  <button matButton="elevated" (click)="loan()">Oui</button>
+                  <button matButton="elevated" (click)="isModal = false">Non</button>
                 } @else {
-                    <button matButton="elevated" (click)="reserve()">Oui</button>
-                    <button matButton="elevated" (click)="showModal()">Non</button>
+                  <button matButton="elevated" (click)="reserve()">Oui</button>
+                  <button matButton="elevated" (click)="isModal = false">Non</button>
                 }
-            </div>
+              </div>
         } @else {
             <div class="example-button-row">
-                <button class = "loan-reserve" matButton="elevated" (click)="showModal()">
+                <button class = "loan-reserve" matButton="elevated" (click)="isModal = true">
                     {{ book.status === "AVAILABLE" ? "Emprunter" : "Réserver" }}
                 </button>
                 <button class = "details" matButton="elevated" (click)="moreDetails()">Détails</button>
