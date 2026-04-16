@@ -1,6 +1,6 @@
 .home-section {
     width: 100%;
-    min-height: 100vh; 
+    min-height: 100vh;
 }
 
 header {
@@ -22,12 +22,18 @@ header div select {
    height: 25px;
 }
 
+.section-librarian {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 25px;
+}
 
 .books-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
-    width: 90%;     
+    width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
