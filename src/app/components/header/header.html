@@ -6,6 +6,13 @@
         <ul>
             <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
             <li><a routerLink="/user" routerLinkActive="active">Mon compte</a></li>
+            @if (authService.getUserRole() == "ROLE_ADMIN") {
+              <li><a routerLink="/admin" routerLinkActive="active">Gestion admin</a></li>
+              <li><a routerLink="/librarian" routerLinkActive="active">Gestion libraire</a></li>
+            }
+            @if (authService.getUserRole() == "ROLE_LIBRARIAN") {
+              <li><a routerLink="/librarian" routerLinkActive="active">Gestion libraire</a></li>
+            }
             <li>
               <a (click)="onLogout()" style="cursor: pointer;">Se déconnecter</a>
             </li>
