@@ -1,17 +1,18 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LibrairyView } from './librairy-view';
 
-describe('LibrairyView', () => {
-  let component: LibrairyView;
-  let fixture: ComponentFixture<LibrairyView>;
+
+describe('Dialog', () => {
+  let component: Dialog;
+  let fixture: ComponentFixture<Dialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LibrairyView],
+      imports: [Dialog],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LibrairyView);
+    fixture = TestBed.createComponent(Dialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

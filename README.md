@@ -1,4 +1,4 @@
-To run CLI angular command : first do --> export PATH="$PATH:/c/Users/cpraud2025/AppData/Roaming/npm" (change UserName)
+To run CLI angular command : first do --> export PATH="$PATH:/c/Users/rmiceli2025/AppData/Roaming/npm" (change UserName)
 
 # FrontEndBookhub
 

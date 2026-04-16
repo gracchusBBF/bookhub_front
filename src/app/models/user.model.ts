@@ -5,13 +5,8 @@ export type User = {
     phoneNumber: string;
     firstName: string;
     lastName: string;
-    //role?: role
-}
-
-export type FlattenUser = {
-    id: number;
-    email: string;
-    phoneNumber: string;
-    firstName: string;
-    lastName: string;
+    userRole: {
+        id: number,
+        roleName: string
+    }
 }

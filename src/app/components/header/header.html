@@ -1,11 +1,14 @@
-<nav>
-    <a routerLink="/">
-      Home
-    </a>
-    <a routerLink="/connexion" routerLinkActive="active">
-      Connexion
-    </a>
-    <a routerLink="/user" routerLinkActive="active">
-      Profil
-    </a>
-  </nav>
+
+  <header>
+    <div class="logo">BookHub</div>
+    @if (authService.isLoggedIn$ | async) {
+    <nav>
+        <ul>
+            <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
+            <li><a routerLink="/services" routerLinkActive="active">Services</a></li>
+            <li>
+              <a (click)="onLogout()" style="cursor: pointer;">Se déconnecter</a>
+            </li>
+        </ul>
+    </nav>}
+  </header>

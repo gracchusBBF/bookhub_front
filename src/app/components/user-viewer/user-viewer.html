@@ -1,71 +1,92 @@
-<p>user-viewer works!</p>
 
-<div class="container grid grid-cols-2 gap-35">
+<div class="container gap-20 mt-10">
+  <h1 class="justify-self-center font-medium text-2xl">Gestion des utilisateurs</h1>
+  <div class="grid grid-cols-4 gap-20 mt-10">
+    
+    <div class="table table col-span-3">
 
-    <div class="table">
+      <mat-form-field class="w-full">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Entrez une valeur" #input>
+      </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-        </mat-form-field>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+                
+          <ng-container matColumnDef="ID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let row"> {{ row.id }} </td>
+          </ng-container>
+            
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Firstname</th>
+            <td mat-cell *matCellDef="let row"> {{ row.firstName}} </td>
+          </ng-container>
+            
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
+            <td mat-cell *matCellDef="let row"> {{ row.lastName }} </td>
+          </ng-container>
+            
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{ row.email }} </td>
+          </ng-container>
 
-        <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource" matSort>
-              
-              <!-- ID Column -->
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-              </ng-container>
-          
-              <!-- Progress Column -->
-              <ng-container matColumnDef="firstname">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> firstname</th>
-                <td mat-cell *matCellDef="let row"> {{ row.firstName}} </td>
-              </ng-container>
-          
-              <!-- Name Column -->
-              <ng-container matColumnDef="lastname">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lastname </th>
-                <td mat-cell *matCellDef="let row"> {{row.lastName}} </td>
-              </ng-container>
-          
-              <!-- Fruit Column -->
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
-              </ng-container>
+          <ng-container matColumnDef="phoneNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phonenumber </th>
+            <td mat-cell *matCellDef="let row"> {{ row.phoneNumber }} </td>
+          </ng-container>
 
-              <ng-container matColumnDef="phoneNumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phonenumber </th>
-                <td mat-cell *matCellDef="let row"> {{row.phoneNumber}} </td>
-              </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+            <td mat-cell *matCellDef="let row"> {{ row.userRole?.roleName }} </td>
+          </ng-container>
 
-              <ng-container matColumnDef="role">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-                <td mat-cell *matCellDef="let row"> {{row.userRole?.roleName}} </td>
-              </ng-container>
-          
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          
-              <!-- Row shown when there is no matching data. -->
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="5">No data matching the filter "{{input.value}}"</td>
-              </tr>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let row">
+                <button matButton="tonal" class="m-2" (click)="deleteUser(row)">supprimer</button>
+                <button matButton="tonal" class="m-2" (click)="openChangeRoleDialog(row)" matTooltip="Modifier le statut">
+                  modifier le role
+                </button>
+              </td>
+          </ng-container>
+            
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            
+            <!-- si pas de données à afficher : -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="7">Aucune donnée ne correspond {{ input.value }}</td>
+            </tr>
 
-            </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-        </div>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
 
     </div>
 
-    <div class="test">
+    <div class="flex flex-col gap-4 ">
+      <mat-card class="example-card card" appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Nombre total d'utilisateurs</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p> Total : {{ allUsers.length }}</p>
+        </mat-card-content>
+      </mat-card>
 
-      <p>
-        truc
-      </p>
-
+      <mat-card class="example-card card" appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Répartition des roles</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p> Utilisateurs: {{ countUser }}</p>
+          <p> Libraires : {{ countLibrarian}}</p>
+          <p> Admin : {{ countAdmin }}</p>
+        </mat-card-content>
+      </mat-card>
     </div>
-
+  </div>
 </div>
