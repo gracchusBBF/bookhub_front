@@ -1,1 +1,125 @@
-<p>dashboard-user works!</p>
+<div class="dashboard-container">
+  <h1 class="main-title">Mon compte</h1>
+
+  <div class="dashboard-layout">
+    <aside class="profile-sidebar">
+      <div class="avatar-section">
+        <mat-icon class="large-avatar">account_circle</mat-icon>
+      </div>
+
+      <div class="info-section">
+        <div class="info-header">
+          <h2>Mes infos</h2>
+          <button mat-icon-button class="settings-btn" (click)="updateUserInfos()">
+            <mat-icon>settings</mat-icon>
+          </button>
+        </div>
+
+        <div class="user-details" *ngIf="user">
+          <ul>
+            <li><strong>Email :</strong> {{ user?.email }}</li>
+            <li><strong>Prénom :</strong> {{ user?.firstName }}</li>
+            <li><strong>Nom :</strong> {{ user?.lastName }}</li>
+            <li><strong>Téléphone :</strong> {{ user?.phoneNumber }}</li>
+          </ul>
+        </div>
+
+        <div class="user-details" *ngIf="!user">
+          <p>Chargement des informations...</p>
+        </div>
+      </div> <!-- ← fermeture info-section manquante -->
+
+      <div class="account-actions">
+        <button mat-button class="link-btn" (click)="openChangePassword()">Modifier mon mot de passe</button>
+        <button mat-button class="link-btn delete-btn" (click)="openDeleteAccount()">Supprimer mon compte</button>
+      </div>
+    </aside>
+
+    <main class="data-tables">
+        
+      <section class="table-group">
+        <div class="table-header">
+          <h3>Mes emprunts</h3>
+          <mat-button-toggle-group 
+          #group="matButtonToggleGroup" 
+          name="loanStatus" 
+          value="en-cours"
+          (change)="filterLoans(group.value)">
+  
+        <mat-button-toggle value="en-cours">en cours</mat-button-toggle>
+        <mat-button-toggle value="historique">historique</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="empruntsSource" class="custom-table">
+            
+            <ng-container matColumnDef="titre">
+              <th mat-header-cell *matHeaderCellDef> titre </th>
+              <td mat-cell *matCellDef="let element"> {{element.bookTitle}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateRetour">
+              <th mat-header-cell *matHeaderCellDef> date de retour </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="retard">
+              <th mat-header-cell *matHeaderCellDef> statut </th>
+              <td mat-cell *matCellDef="let element">
+                
+                <span *ngIf="element.returnDate" style="color: #9e9e9e; font-style: italic;">
+                  Rendu
+                </span>
+            
+                <span *ngIf="!element.returnDate"
+                      [class.text-danger]="isOverdue(element)" 
+                      [style.color]="isOverdue(element) ? '#f44336' : '#4caf50'"
+                      [style.font-weight]="'bold'">
+                  {{ isOverdue(element) ? 'Retard' : 'En cours' }}
+                </span>
+            
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['titre', 'dateRetour', 'retard']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['titre', 'dateRetour', 'retard'];"></tr>
+          </table>
+
+          <div *ngIf="empruntsSource.length === 0" class="empty-message">
+            Aucun emprunt en cours.
+          </div>
+        </div>
+      </section>
+
+      <section class="table-group">
+        <div class="table-header">
+          <h3>Mes réservations</h3>
+        </div>
+
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="reservationsSource" class="custom-table">
+            <ng-container matColumnDef="titre">
+              <th mat-header-cell *matHeaderCellDef> titre </th>
+              <td mat-cell *matCellDef="let element"> {{element.titre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateRetour">
+              <th mat-header-cell *matHeaderCellDef> date de retour </th>
+              <td mat-cell *matCellDef="let element"> {{element.dateRetour}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> position </th>
+              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['titre', 'dateRetour', 'position']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['titre', 'dateRetour', 'position'];"></tr>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
