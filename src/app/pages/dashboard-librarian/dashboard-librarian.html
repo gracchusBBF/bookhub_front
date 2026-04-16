@@ -1,1 +1,104 @@
-<p>dashboard-librarian works!</p>
+<div class="bookhub-librarian-dashboard-container">
+  <h1 class=".mat-font-title-lg">Tableau de bord</h1>
+  <div class="bookhub-librarian-dashboard-card-container">
+    <mat-card class="bookhub-librarian-dashboard-loanTotal" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Emprunts totale</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          {{ nbTotalLoans }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="bookhub-librarian-dashboard-loanActive" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Emprunts actifs</mat-card-title>
+      </mat-card-header>
+      <mat-card-content >
+        <p>
+          {{ nbActiveLoans }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <div class="bookhub-librarian-dashboard-topTen">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Top 10 d'emprunts</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <!--    =============================================-->
+    <!--                   RETARDS-->
+    <!--    =============================================-->
+    <div class="bookhub-librarian-dashboard-overdue">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Retards</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="overdueLoans()" class="bookhub-librarian-dashboard-overdue-table">
+            <ng-container matColumnDef="deadline">
+              <th mat-header-cell *matHeaderCellDef> Date limite </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="bookTitle">
+              <th mat-header-cell *matHeaderCellDef> Livre </th>
+              <td mat-cell *matCellDef="let element"> {{element.bookTitle}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="overdues_displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: overdues_displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+        @if (overdueLoans().length > 5) {
+          <mat-card-actions>
+            <button matButton>Voir la liste de retards</button>
+          </mat-card-actions>
+        }
+      </mat-card>
+    </div>
+    <div class="bookhub-librarian-dashboard-trends">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Évolutions</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+<!--    =============================================-->
+<!--                   EMPRUNTS ACTIFS-->
+<!--    =============================================-->
+    <div class="bookhub-librarian-dashboard-loans">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Emprunts actifs</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="activeLoans()" class="bookhub-librarian-dashboard-overdue-table">
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef> Date début </th>
+              <td mat-cell *matCellDef="let element"> {{element.startDate | date:'dd/MM/yyyy' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="deadline">
+              <th mat-header-cell *matHeaderCellDef> Date limite </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="bookTitle">
+              <th mat-header-cell *matHeaderCellDef> Livre </th>
+              <td mat-cell *matCellDef="let element"> {{element.bookTitle}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button color="primary" (click)="onReturnBook(element.id)">
+                  Retourner
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="loans_displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: loans_displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
