@@ -45,6 +45,17 @@
         Supprimer
       </button>
     </div>
+  } @else {
+    <div>
+      <button
+        class="section-hide"
+        matButton="elevated"
+        (click)="handleDeleteABookClick(book.id)"
+      >
+        <mat-icon>delete</mat-icon>
+        Supprimer
+      </button>
+    </div>
   }
 
 </mat-card>
