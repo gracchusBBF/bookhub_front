@@ -40,32 +40,39 @@
       <section class="table-group">
         <div class="table-header">
           <h3>Mes emprunts</h3>
-          <mat-button-toggle-group 
-          #group="matButtonToggleGroup" 
-          name="loanStatus" 
-          value="en-cours"
-          (change)="filterLoans(group.value)">
-  
-        <mat-button-toggle value="en-cours">en cours</mat-button-toggle>
-        <mat-button-toggle value="historique">historique</mat-button-toggle>
-        </mat-button-toggle-group>
+          <div class="toggle-container">
+            <button
+              type="button"
+              class="toggle-button"
+              [class.active]="currentStatus === 'en-cours'"
+              (click)="setStatus('en-cours')">
+              en cours
+            </button>
+            <button
+              type="button"
+              class="toggle-button"
+              [class.active]="currentStatus === 'historique'"
+              (click)="setStatus('historique')">
+              historique
+            </button>
+          </div>
       </div>
 
         <div class="table-wrapper">
           <table mat-table [dataSource]="empruntsSource" class="custom-table">
             
             <ng-container matColumnDef="titre">
-              <th mat-header-cell *matHeaderCellDef> titre </th>
+              <th mat-header-cell *matHeaderCellDef> Titre </th>
               <td mat-cell *matCellDef="let element"> {{element.bookTitle}} </td>
             </ng-container>
 
             <ng-container matColumnDef="dateRetour">
-              <th mat-header-cell *matHeaderCellDef> date de retour </th>
+              <th mat-header-cell *matHeaderCellDef> Date de retour </th>
               <td mat-cell *matCellDef="let element"> {{element.deadline | date:'dd/MM/yyyy'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="retard">
-              <th mat-header-cell *matHeaderCellDef> statut </th>
+              <th mat-header-cell *matHeaderCellDef> Statut </th>
               <td mat-cell *matCellDef="let element">
                 
                 <span *ngIf="element.returnDate" style="color: #9e9e9e; font-style: italic;">

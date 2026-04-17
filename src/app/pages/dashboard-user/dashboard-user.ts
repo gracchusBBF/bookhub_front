@@ -9,14 +9,12 @@ import { DeleteAccountDialog } from '../../components/delete-account-dialog/dele
 import { AuthService } from '../../services/auth';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Optionnel pour les alertes
 import { ChangeDetectorRef } from '@angular/core';
-// Imports Angular Material
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-// Définition des interfaces pour tes données
 interface Emprunt {
   titre: string;
   dateRetour: string;
@@ -63,6 +61,13 @@ export class DashboardUser implements OnInit {
     { titre: 'Dune', dateRetour: 'En attente', position: '2/5' },
     { titre: '', dateRetour: '', position: '' }
   ];
+
+  currentStatus: 'en-cours' | 'historique' = 'en-cours'; // État par défaut
+
+setStatus(status: 'en-cours' | 'historique') {
+  this.currentStatus = status;
+  this.filterLoans(status); // Appelle votre fonction existante
+}
 
   ngOnInit(): void {
     const email = this.authService.getEmail();

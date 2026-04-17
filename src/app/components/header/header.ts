@@ -12,6 +12,11 @@ import { AuthService } from '../../services/auth';
 export class Header {
   public authService = inject(AuthService);
   private router = inject(Router);
+  public isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   onLogout() {
     this.authService.logout();
