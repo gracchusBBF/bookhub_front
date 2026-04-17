@@ -152,8 +152,6 @@ export class BookApi {
   }
 
   saveABook(book: any) {
-    console.log('saveABook');
-    console.log(book);
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
