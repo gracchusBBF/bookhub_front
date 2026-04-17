@@ -6,7 +6,7 @@
   @if (authService.isLoggedIn$ | async) {
     <nav class="desktop-nav">
       <ul>
-        <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
+        <li><a routerLink="/" routerLinkActive="active">Catalogue</a></li>
         <li><a routerLink="/user" routerLinkActive="active">Mon compte</a></li>
         @if (authService.getUserRole() == "ROLE_ADMIN") {
           <li><a routerLink="/admin" routerLinkActive="active">Gestion admin</a></li>
