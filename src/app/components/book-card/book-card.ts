@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth';
 import { Loan } from '../../models/loan';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { BookDialog } from '../book-dialog/book-dialog'; 
+import { BookDialog } from '../book-dialog/book-dialog';
 
 @Component({
   selector: 'app-book-card',
@@ -88,5 +88,16 @@ export class BookCard {
       verticalPosition: 'bottom',
     });
     this.isModal = false;
+  }
+
+  handleDeleteABookClick(id: number): any {
+    this.bookApiService.deleteABook(id).subscribe({
+      next: (response) => {
+        console.log(`Le livre avec id ${id} a bien été supprimé.`)
+      },
+      error: (err) => {
+        console.error('Erreur :', err);
+      },
+    });
   }
 }

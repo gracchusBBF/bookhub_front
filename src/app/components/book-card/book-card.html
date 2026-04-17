@@ -2,7 +2,7 @@
     <div class="top-part-card">
         @if(isDetails) {
             <p>Mettre la modale de commentaire/détail ici</p>
-        }         
+        }
         <mat-card-header style="text-align: center;">
             <mat-card-title>{{ book.title }}</mat-card-title>
             <mat-card-subtitle>{{ book.firstName}} {{book.lastName}}</mat-card-subtitle>
@@ -34,7 +34,17 @@
                 <button class = "details" matButton="elevated" (click)="moreDetails()">Détails</button>
             </div>
         }
-
     </section>
+  @if(authService.getUserRole() === "ROLE_LIBRARIAN" && book.status === "AVAILABLE") {
+    <div>
+      <button
+        matButton="elevated"
+        (click)="handleDeleteABookClick(book.id)"
+      >
+        <mat-icon>delete</mat-icon>
+        Supprimer
+      </button>
+    </div>
+  }
 
 </mat-card>

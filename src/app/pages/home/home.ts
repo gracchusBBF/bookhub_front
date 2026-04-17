@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookInterface } from '../../models/book-interface';
-import { forkJoin } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 import { AuthService } from '../../services/auth';
 import { AddBookDialog } from '../../components/add-book-dialog/add-book-dialog';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,9 +32,7 @@ import { ChangePasswordDialog } from '../../components/change-password-dialog/ch
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  constructor(
-    private dialog: MatDialog
-  ) {}
+  constructor(private dialog: MatDialog) {}
 
   protected readonly bookApiService = inject(BookApi);
   private readonly route = inject(ActivatedRoute);

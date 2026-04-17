@@ -5,7 +5,6 @@
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   gap: 16px;
-  border: red solid 2px;
   padding: 10px;
   min-height: 80vh;
 }

@@ -35,7 +35,7 @@ export class BookApi {
   public readonly status = this._status.asReadonly();
   public readonly comments = this._comments.asReadonly();
 
-  
+
   getCommentsByBookId(bookId: number): Observable<CommentInterface[]> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -153,8 +153,17 @@ export class BookApi {
 
   saveABook(book: any) {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
     });
     return this.http.post(this.APIUrlBook, book, { headers });
+  }
+
+  deleteABook(id: number) {
+    console.log("NUMBER: ", id);
+    console.log(`${this.APIUrlBook}/${id}`);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+    return this.http.delete(`${this.APIUrlBook}/${id}`, { headers });
   }
 }
