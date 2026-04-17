@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
@@ -29,8 +29,9 @@ import { MatIconModule } from '@angular/material/icon';
 export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
-  hide = true; // Pour masquer/afficher le mot de passe
-
+  hide = true; 
+  errorMessage = signal('');
+  
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)])
@@ -38,24 +39,26 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.errorMessage.set('');
       // 2. Appel au service de login
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Connexion réussie !');
           
           // 3. Récupération du rôle et redirection
           const role = this.authService.getUserRole();
           this.redirectBasedOnRole(role);
         },
         error: (err) => {
-          console.error('Erreur de connexion', err);
-          // Optionnel : ajouter un message d'erreur pour l'utilisateur
+          if (err.status === 403 || err.status === 401) {
+            this.errorMessage.set("Échec de la connexion : identifiants incorrects.");
+          } else {
+            this.errorMessage.set('Une erreur est survenue. Veuillez réessayer.');
+          }
         }
       });
     }
   }
   private redirectBasedOnRole(role: string) {
-    console.log(role)
     if (role === 'ROLE_ADMIN') {
       this.router.navigate(['/admin']);
     } else if (role === 'ROLE_LIBRARIAN') {

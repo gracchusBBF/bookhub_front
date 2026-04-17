@@ -38,10 +38,10 @@ export class AddBookDialog {
   }
 
   onSave() {
-    console.log('Livre :', this.BookForm.value);
+    
     this.bookService.saveABook(this.BookForm.value).subscribe({
       next: (res) => {
-        console.log('Book saved:', res);
+        
         this.dialogRef.close();
       },
       error: (err) => console.error(err),

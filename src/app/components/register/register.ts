@@ -37,8 +37,15 @@ export class Register {
     lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
     firstName: new FormControl('', [Validators.required, Validators.minLength(3)]), // Correction typo ici
     email: new FormControl('', [Validators.required, Validators.email]),
-    phoneNumber: new FormControl('', [Validators.required]), // Ajout du champ manquant
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    phoneNumber: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{10,}$/)
+    ]),
     confirmPassword: new FormControl('', [Validators.required])
   }, { validators: this.passwordMatchValidator });
 
@@ -49,26 +56,27 @@ export class Register {
     return password === confirm ? null : { passwordMismatch: true };
   }
 
-  onRegister() {
-    if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
-        next: () => {
-          // Le token est déjà stocké grâce au 'tap' dans le service
-          const role = this.authService.getUserRole();
-          
-          // Redirection basée sur le rôle
-          if (role === 'ROLE_ADMIN') {
-            this.router.navigate(['/admin']);
-          } else if (role === 'ROLE_LIBRARIAN') {
-            this.router.navigate(['/librarian']);
-          } else {
-            this.router.navigate(['']);
-          }
-        },
-        error: (err) => {
-          console.error('Erreur inscription:', err);
+  errorMessage = '';
+
+onRegister() {
+  if (this.registerForm.valid) {
+    this.errorMessage = '';
+    this.authService.register(this.registerForm.value).subscribe({
+      next: () => {
+        const role = this.authService.getUserRole();
+        if (role === 'ROLE_ADMIN') {
+          this.router.navigate(['/admin']);
+        } else if (role === 'ROLE_LIBRARIAN') {
+          this.router.navigate(['/librarian']);
+        } else {
+          this.router.navigate(['']);
         }
-      });
-    }
+      },
+      error: (err) => {
+        console.error('Erreur inscription:', err);
+        this.errorMessage = err?.error?.message || 'Une erreur est survenue. Veuillez réessayer.';
+      }
+    });
   }
+}
 }

@@ -1,62 +1,102 @@
 <div class="login-container">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Créer un compte</mat-card-title>
-      </mat-card-header>
-  
-      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-        <mat-card-content>
-          
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="lastName">
-            <mat-icon matSuffix>person</mat-icon>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>prénom</mat-label>
-            <input matInput formControlName="firstName">
-            <mat-icon matSuffix>person</mat-icon>
-          </mat-form-field>
-  
-  
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email">
-            <mat-icon matSuffix>email</mat-icon>
-          </mat-form-field>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Créer un compte</mat-card-title>
+    </mat-card-header>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Téléphone</mat-label>
-            <input matInput formControlName="phoneNumber">
-            <mat-icon matSuffix>phone</mat-icon>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Mot de passe</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Confirmer le mot de passe</mat-label>
-            <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
-            <button mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" type="button">
-              <mat-icon>{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="registerForm.hasError('passwordMismatch')">
-              Les mots de passe ne correspondent pas
-            </mat-error>
-          </mat-form-field>
-  
-        </mat-card-content>
-  
-        <mat-card-actions>
-          <button mat-raised-button color="accent" type="submit" [disabled]="!registerForm.valid">
-            S'INSCRIRE
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <mat-card-content>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="lastName">
+          <mat-icon matSuffix>person</mat-icon>
+          @if (registerForm.get('lastName')?.hasError('required')) {
+            <mat-error>Le nom est requis</mat-error>
+          }
+          @if (registerForm.get('lastName')?.hasError('minlength')) {
+            <mat-error>Le nom doit contenir au moins 3 caractères</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="firstName">
+          <mat-icon matSuffix>person</mat-icon>
+          @if (registerForm.get('firstName')?.hasError('required')) {
+            <mat-error>Le prénom est requis</mat-error>
+          }
+          @if (registerForm.get('firstName')?.hasError('minlength')) {
+            <mat-error>Le prénom doit contenir au moins 3 caractères</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-icon matSuffix>email</mat-icon>
+          @if (registerForm.get('email')?.hasError('required')) {
+            <mat-error>L'email est requis</mat-error>
+          }
+          @if (registerForm.get('email')?.hasError('email')) {
+            <mat-error>L'adresse email n'est pas valide</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="phoneNumber" maxlength="10">
+          <mat-icon matSuffix>phone</mat-icon>
+          @if (registerForm.get('phoneNumber')?.hasError('required')) {
+            <mat-error>Le numéro de téléphone est requis</mat-error>
+          }
+          @if (registerForm.get('phoneNumber')?.hasError('pattern')) {
+            <mat-error>Le numéro doit contenir exactement 10 chiffres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
-        </mat-card-actions>
-      </form>
-    </mat-card>
-  </div>
+          @if (registerForm.get('password')?.hasError('required')) {
+            <mat-error>Le mot de passe est requis</mat-error>
+          }
+          @if (registerForm.get('password')?.hasError('minlength')) {
+            <mat-error>Le mot de passe doit contenir au moins 10 caractères</mat-error>
+          }
+          @if (registerForm.get('password')?.hasError('pattern') && !registerForm.get('password')?.hasError('minlength')) {
+            <mat-error>Le mot de passe doit contenir au moins 1 majuscule, 1 chiffre et 1 caractère spécial</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirmer le mot de passe</mat-label>
+          <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword">
+          <button mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" type="button">
+            <mat-icon>{{hideConfirm ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          @if (registerForm.get('confirmPassword')?.hasError('required')) {
+            <mat-error>La confirmation du mot de passe est requise</mat-error>
+          }
+          @if (registerForm.hasError('passwordMismatch') && !registerForm.get('confirmPassword')?.hasError('required')) {
+            <mat-error>Les mots de passe ne correspondent pas</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p style="color: red; font-size: 14px; margin-top: 8px;">{{ errorMessage }}</p>
+        }
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="accent" type="submit" [disabled]="!registerForm.valid">
+          S'INSCRIRE
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

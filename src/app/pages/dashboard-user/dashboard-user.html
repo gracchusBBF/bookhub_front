@@ -99,33 +99,7 @@
         </div>
       </section>
 
-      <section class="table-group">
-        <div class="table-header">
-          <h3>Mes réservations</h3>
-        </div>
-
-        <div class="table-wrapper">
-          <table mat-table [dataSource]="reservationsSource" class="custom-table">
-            <ng-container matColumnDef="titre">
-              <th mat-header-cell *matHeaderCellDef> Titre </th>
-              <td mat-cell *matCellDef="let element"> {{element.titre}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="dateRetour">
-              <th mat-header-cell *matHeaderCellDef> Date de retour </th>
-              <td mat-cell *matCellDef="let element"> {{element.dateRetour}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Position </th>
-              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="['titre', 'dateRetour', 'position']"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['titre', 'dateRetour', 'position'];"></tr>
-          </table>
-        </div>
-      </section>
+      
 
     </main>
   </div>
