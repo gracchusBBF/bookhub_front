@@ -1,0 +1,3 @@
+.text-bold {
+    font-weight: var(--mat-sys-body-large-weight, 700);
+  }

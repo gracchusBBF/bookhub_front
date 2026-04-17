@@ -1,0 +1,47 @@
+<div class="comments-container">
+  @if (comments().length === 0) {
+    <p class="no-comments">Aucun commentaire pour ce livre.</p>
+  } @else {
+    @for (comment of comments(); track comment.id) {
+      <div class="comment-card">
+        <div class="header-comment">
+          <h2>{{ comment.userFirstName }} {{ comment.userLastName }}</h2>
+          <p class="score">★ {{ comment.rate }}/5</p>
+        </div>
+        <p class="comment-text">{{ comment.comment }}</p>
+      </div>
+    }
+  }
+
+  <div class="add-comment">
+    @if (editNewComment) {
+      <h3>Ajouter un commentaire</h3>
+
+      <label for="rate">Note (1 à 5)</label>
+      <input
+        id="rate"
+        type="number"
+        min="1"
+        max="5"
+        [ngModel]="newComment().rate"
+        (ngModelChange)="onRateChange($event)"/>
+
+      <label for="comment">Commentaire</label>
+      <textarea
+        id="comment"
+        rows="3"
+        [ngModel]="newComment().comment"
+        (ngModelChange)="onCommentChange($event)"
+        placeholder="Votre commentaire...">
+      </textarea>
+
+      <div class="form-actions">
+        <button class="btn-primary" (click)="submitComment()">Envoyer</button>
+        <button class="btn-cancel" (click)="openAddComment()">Annuler</button>
+      </div>
+
+    } @else {
+      <button class="btn-add" (click)="openAddComment()">+ Ajouter un commentaire</button>
+    }
+  </div>
+</div>

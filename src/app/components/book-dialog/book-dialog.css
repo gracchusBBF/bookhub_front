@@ -1,0 +1,160 @@
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+    background: #fff;
+    border-radius: 12px;
+  }
+  
+  /* HEADER */
+  .modal-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  
+  .close-btn:hover {
+    background: #f0f0f0;
+  }
+  
+  /* BODY */
+  .modal-body {
+    display: flex;
+    flex: 1;
+    height: 100%;
+  }
+  
+  /* LEFT PANEL */
+  .left-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: row !important;
+    gap: 24px;
+    padding: 24px;
+    /* overflow-y: auto; */
+  }
+  
+  .book-info {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .book-cover {
+    width: 140px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .book-title {
+    margin: 0 0 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  
+  .label {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: #ffcdd2;
+    color: #c62828;
+  }
+  
+  .badge.available {
+    background: #c8e6c9;
+    color: #2e7d32;
+  }
+  
+  .synopsis h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /* RIGHT PANEL */
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-left: 1px solid #e0e0e0;
+    overflow-y: auto;
+    background: #fafafa;
+  }
+  
+  .right-panel h3 {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /* FOOTER */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+    flex-shrink: 0;
+  }
+  
+  .btn-primary {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .btn-primary:hover {
+    background: #1565c0;
+  }
+  
+  .btn-secondary {
+    background: none;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .btn-secondary:hover {
+    background: #f0f0f0;
+  }

@@ -8,10 +8,12 @@ import { BookApi } from '../../services/book-api';
 import { AuthService } from '../../services/auth';
 import { Loan } from '../../models/loan';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { BookDialog } from '../book-dialog/book-dialog'; 
 
 @Component({
   selector: 'app-book-card',
-  imports: [MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [MatDialogModule, MatSnackBarModule, MatCardModule, MatButtonModule, MatDividerModule, MatIconModule],
   templateUrl: './book-card.html',
   styleUrl: './book-card.css',
 })
@@ -23,6 +25,7 @@ export class BookCard {
     private cdr: ChangeDetectorRef
   ) {}
 
+  private readonly dialog = inject(MatDialog);
   protected readonly authService = inject(AuthService);
   protected readonly bookApiService = inject(BookApi);
 
@@ -30,7 +33,13 @@ export class BookCard {
   isDetails: boolean = false;
 
   moreDetails() {
-    this.isDetails = !this.isDetails;
+    this.dialog.open(BookDialog, {
+      width: '90vw',
+      height: '90vh',
+      maxWidth: '90vw',
+      data: { book: this.book },
+      panelClass: 'book-details-dialog'
+    });
   }
 
   loan() {
