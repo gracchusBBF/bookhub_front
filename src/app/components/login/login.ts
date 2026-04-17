@@ -50,7 +50,6 @@ export class Login {
         },
         error: (err) => {
           if (err.status === 403 || err.status === 401) {
-            console.log("errror")
             this.errorMessage.set("Échec de la connexion : identifiants incorrects.");
           } else {
             this.errorMessage.set('Une erreur est survenue. Veuillez réessayer.');

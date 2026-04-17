@@ -45,7 +45,6 @@ export class BookCard {
   loan() {
     const email = this.authService.getEmail();
     if (!email) {
-      console.error("Email utilisateur non disponible !");
       this.isModal = false;
       this.cdr.detectChanges();
       return;

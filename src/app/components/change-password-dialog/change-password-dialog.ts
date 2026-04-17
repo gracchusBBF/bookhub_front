@@ -9,7 +9,8 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
   selector: 'app-change-password-dialog',
   standalone: true,
   imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
-  templateUrl: './change-password-dialog.html'
+  templateUrl: './change-password-dialog.html',
+  styleUrl: './change-password-dialog.css',
 
 })
 export class ChangePasswordDialog {
