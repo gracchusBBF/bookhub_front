@@ -51,7 +51,6 @@ export class CommentarySection implements OnInit {
 
   submitComment():void {
     const payload = this.newComment();
-    console.log("Comment: ", payload)
 
     if(!payload.comment?.trim() || !payload.rate) return;
 

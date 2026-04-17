@@ -70,7 +70,6 @@ export class UserViewer implements AfterViewInit {
 
   ngOnInit() {
     this.userService.getUsers().subscribe(users => {
-      console.log(users);
       this.dataSource.data = users;
       this.allUsers = users;
     });

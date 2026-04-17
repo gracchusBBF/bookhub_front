@@ -62,7 +62,6 @@ export class AuthService {
     if (!token) return '';
     try {
       const decoded: any = jwtDecode(token);
-      console.log('Contenu du token décodé :', decoded); // <--- AJOUTE CECI
       
       // Souvent dans Spring Security, l'email est dans 'sub' ou 'username'
       return decoded.email || decoded.sub || ''; 

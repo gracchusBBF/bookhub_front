@@ -11,12 +11,9 @@ export const isRoleAllowed = (allowedRoles: string[]) => {
     const userRole = authService.getUserRole();
 
     if (!allowedRoles.includes(userRole)) {
-        console.log(authService.getUserRole())
         router.navigateByUrl('')
         return false;
     }
-
-    console.log(authService.getUserRole())
     return true;
     }   
     
