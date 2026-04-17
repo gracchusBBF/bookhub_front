@@ -158,3 +158,28 @@
   .btn-secondary:hover {
     background: #f0f0f0;
   }
+
+  @media (max-width: 400px) {
+    .modal-body{
+      flex-direction: column;
+    }
+    .book-info{
+      flex-direction: column;
+      
+    }
+
+    .book-info img {
+      flex: 1;
+    }
+
+    .book-info > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+
+    .right-panel{
+      flex: 2;
+    }
+  }

@@ -1,43 +1,7 @@
-.home-section {
-    width: 100%;
-    min-height: 100vh; 
-}
-
-.books-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    width: 90%;     
-    max-width: 1200px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    padding: 20px 0;
-    margin-top: 50px;
-}
-
-mat-form-field {
-    text-align: center;
-    margin: 10px 0 0 50px ;
-    width: 500px !important;
-}
-
-.example-form-field {
-    width: 200px;
-}
-
-.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    margin-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-.pagination button.active {
-    background-color: #1a73e8;
-    color: white;
-    border-radius: 4px;
+/* ===== Règles générales ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .home-section {
@@ -45,12 +9,13 @@ mat-form-field {
     min-height: 100vh;
 }
 
+/* Header */
 header {
     display: flex;
     justify-content: space-around;
     height: 50px;
     align-items: center;
-    margin-top : 25px;
+    margin-top: 25px;
 }
 
 header div {
@@ -61,37 +26,33 @@ header div {
 }
 
 header div select {
-   height: 25px;
+    height: 25px;
 }
 
-.section-librarian {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 25px;
-}
-
+/* Conteneur des livres */
 .books-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     width: 90%;
     max-width: 1200px;
-    margin: 0 auto;
-    box-sizing: border-box;
+    margin: 50px auto 0;
     padding: 20px 0;
-    margin-top: 50px;
+    box-sizing: border-box;
 }
 
+/* Formulaires (MatFormField) */
 mat-form-field {
     text-align: center;
     width: 500px !important;
+    margin: 10px 0 0 50px;
 }
 
 .example-form-field {
     width: 200px;
 }
 
+/* Pagination */
 .pagination {
     display: flex;
     align-items: center;
@@ -107,3 +68,42 @@ mat-form-field {
     border-radius: 4px;
 }
 
+/* Section libraire */
+.section-librarian {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 25px;
+}
+
+/* ===== Media Queries (Mobile) ===== */
+@media (max-width: 400px) {
+    /* Grille des livres en 2 colonnes */
+    .books-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 95%;
+        margin-top: 20px;
+        padding: 10px 0;
+    }
+
+    /* Ajustement des formulaires */
+    mat-form-field {
+        width: 90% !important;
+        margin: 10px auto 0; /* Centré sur mobile */
+    }
+
+    /* Optionnel : ajustement des cartes de livres */
+    .books-container .book-card {
+        width: 100%;
+    }
+
+    .filter-search-top{
+        flex-direction: column;
+        height: 120px;
+    }
+
+    p {
+        text-align: center;
+    }
+}

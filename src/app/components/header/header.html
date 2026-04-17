@@ -1,22 +1,42 @@
+<header class="header-app">
+  <div class="logo" routerLink="/" routerLinkActive="active">BookHub</div>
 
-  <header>
-    <div class="logo" routerLink="/" routerLinkActive="active">BookHub</div>
-    @if (authService.isLoggedIn$ | async) {
-    <nav>
-        <ul>
-            <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
-            <li><a routerLink="/user" routerLinkActive="active">Mon compte</a></li>
-            @if (authService.getUserRole() == "ROLE_ADMIN") {
-              <li><a routerLink="/admin" routerLinkActive="active">Gestion admin</a></li>
-              <li><a routerLink="/librarian" routerLinkActive="active">Gestion libraire</a></li>
-            }
-            @if (authService.getUserRole() === "ROLE_LIBRARIAN") {
-              <li><a routerLink="/librarian" routerLinkActive="active">Tableau de bord</a></li>
-              <li><a routerLink="/librarian/books" routerLinkActive="active">Gérer le catalogue</a></li>
-            }
-            <li>
-              <a (click)="onLogout()" style="cursor: pointer;">Se déconnecter</a>
-            </li>
-        </ul>
-    </nav>}
-  </header>
+
+  <!-- Nav classique -->
+  @if (authService.isLoggedIn$ | async) {
+    <nav class="desktop-nav">
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
+        <li><a routerLink="/user" routerLinkActive="active">Mon compte</a></li>
+        @if (authService.getUserRole() == "ROLE_ADMIN") {
+          <li><a routerLink="/admin" routerLinkActive="active">Gestion admin</a></li>
+          <li><a routerLink="/librarian" routerLinkActive="active">Gestion libraire</a></li>
+        }
+        @if (authService.getUserRole() === "ROLE_LIBRARIAN") {
+          <li><a routerLink="/librarian" routerLinkActive="active">Tableau de bord</a></li>
+          <li><a routerLink="/librarian/books" routerLinkActive="active">Gérer le catalogue</a></li>
+        }
+        <li><a (click)="onLogout()" style="cursor: pointer;">Se déconnecter</a></li>
+      </ul>
+    </nav>
+  }
+
+  <!-- Menu mobile -->
+  @if (authService.isLoggedIn$ | async) {
+    <nav class="mobile-nav">
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">🏠</span> </a></li>
+        <li><a routerLink="/user" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">👤</span></a></li>
+        @if (authService.getUserRole() == "ROLE_ADMIN") {
+          <li><a routerLink="/admin" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">🔧</span></a></li>
+          <li><a routerLink="/librarian" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">📚</span></a></li>
+        }
+        @if (authService.getUserRole() === "ROLE_LIBRARIAN") {
+          <li><a routerLink="/librarian" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">📊</span></a></li>
+          <li><a routerLink="/librarian/books" routerLinkActive="active" (click)="toggleMenu()"><span class="icon">📖</span></a></li>
+        }
+        <li><a (click)="onLogout(); toggleMenu()" style="cursor: pointer;"><span class="icon">🚪</span></a></li>
+      </ul>
+    </nav>
+  }
+</header>
