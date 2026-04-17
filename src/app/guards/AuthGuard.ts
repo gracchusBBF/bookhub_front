@@ -11,8 +11,5 @@ export const AuthGuard = () => {
         router.navigateByUrl('/connexion')
         return false;
     }
-
-    
     return true;
-    
 }

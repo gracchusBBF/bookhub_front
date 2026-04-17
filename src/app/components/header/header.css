@@ -68,6 +68,14 @@ body {
     font-size: 0.8rem;
     margin-top: 3px;
   }
+
+  .desktop-nav {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
   
   /* Media Queries pour mobile (<= 400px) */
   @media (max-width: 400px) {
