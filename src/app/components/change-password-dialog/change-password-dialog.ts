@@ -26,7 +26,7 @@ export class ChangePasswordDialog {
 
   onSave() {
     if (this.passwordForm.valid) {
-      console.log('Nouveau mot de passe :', this.passwordForm.value);
+      
       this.dialogRef.close(this.passwordForm.value);
     }
   }
