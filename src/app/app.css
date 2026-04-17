@@ -1,3 +1,7 @@
 .text-bold {
     font-weight: var(--mat-sys-body-large-weight, 700);
-  }
+}
+
+app-header {
+  width: 100%;
+}
