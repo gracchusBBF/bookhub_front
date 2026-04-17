@@ -122,7 +122,6 @@ export class Home implements OnInit {
   private loadBooks(page: number, category: string, status: string): void {
     this.bookApiService.getBooks(page, category, status).subscribe({
       next: (response) => {
-        console.log(category, status);
         this.books.set(response?.content ?? []);
         this.totalPages.set(response?.totalPages ?? 0);
       },
@@ -143,7 +142,6 @@ export class Home implements OnInit {
   }
 
   handleAddBookClick() {
-    console.log('Add Book Modal...');
     const dialogRef = this.dialog.open(AddBookDialog, {
       width: '400px',
     });

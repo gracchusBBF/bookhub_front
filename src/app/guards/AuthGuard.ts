@@ -9,11 +9,10 @@ export const AuthGuard = () => {
 
     if (!authService.authStatus.getValue()) {
         router.navigateByUrl('/connexion')
-        console.log(authService.authStatus.getValue())
         return false;
     }
 
-    console.log(authService.authStatus.getValue())
+    
     return true;
     
 }

@@ -27,8 +27,6 @@ export class DashboardLibrarian implements OnInit {
   ngOnInit() {
     this.librarianService.getActiveLoansList().subscribe({
       next: (data) => {
-        console.log('getLoansList: ');
-        console.log(data);
         this.activeLoans.set(data);
       },
       error: (err) => console.error(err),
@@ -57,13 +55,11 @@ export class DashboardLibrarian implements OnInit {
   }
 
   onReturnBook(id: string) {
-    console.log('Return book with id:', id);
     this.librarianService
       .returnABook(id)
       .pipe(switchMap(() => this.librarianService.getActiveLoansList()))
       .subscribe({
         next: (loans) => {
-          console.log('Updated loans:', loans);
           this.activeLoans.set(loans);
         },
         error: (err) => console.error(err),
